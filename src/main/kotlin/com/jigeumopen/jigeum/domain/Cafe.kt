@@ -21,19 +21,19 @@ class Cafe(
     @Column(length = 20)
     val phone: String? = null,
 
-    @Column(precision = 10, scale = 8)
+    @Column(nullable = false, precision = 10, scale = 8)  // NOT NULL 추가!
     val latitude: BigDecimal,
 
-    @Column(precision = 11, scale = 8)
+    @Column(nullable = false, precision = 11, scale = 8)  // NOT NULL 추가!
     val longitude: BigDecimal,
 
-    @Column(columnDefinition = "geometry(Point,4326)")
+    @Column(nullable = false, columnDefinition = "geometry(Point,4326)")  // NOT NULL 추가!
     val location: Point,
 
     @Column(name = "open_time")
     val openTime: LocalTime? = null,
 
-    @Column(name = "close_time")
+    @Column(name = "close_time", nullable = false)  // NOT NULL 추가!
     val closeTime: LocalTime,
 
     @Column(length = 50)
