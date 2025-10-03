@@ -1,6 +1,6 @@
-package com.jigeumopen.jigeum.repository
+package com.jigeumopen.jigeum.domain.repository
 
-import com.jigeumopen.jigeum.domain.Cafe
+import com.jigeumopen.jigeum.domain.entity.Cafe
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

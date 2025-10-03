@@ -1,6 +1,6 @@
-package com.jigeumopen.jigeum.external
+package com.jigeumopen.jigeum.infrastructure.client
 
-import com.jigeumopen.jigeum.external.config.GooglePlacesConfig
+import com.jigeumopen.jigeum.infrastructure.config.GooglePlacesConfig
 import com.jigeumopen.jigeum.external.dto.*
 import com.jigeumopen.jigeum.external.exception.GooglePlacesException
 import org.slf4j.LoggerFactory

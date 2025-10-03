@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.domain
+package com.jigeumopen.jigeum.domain.entity
 
 import jakarta.persistence.*
 import org.locationtech.jts.geom.Point

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class SeoulGridCollector(
-    private val cafeDataCollector: CafeDataCollector
+    private val cafeSearchService: CafeSearchService
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -19,7 +19,7 @@ class SeoulGridCollector(
             logger.info("[$name] 데이터 수집 시작...")
             Thread.sleep(2000)
 
-            val count = cafeDataCollector.collectCafesInArea(lat, lng, 3000)
+            val count = cafeSearchService.collectCafesInArea(lat, lng, 3000)
             results[name] = count
             totalSaved += count
 

@@ -1,6 +1,6 @@
-package com.jigeumopen.jigeum.dto
+package com.jigeumopen.jigeum.api.dto.response
 
-import com.jigeumopen.jigeum.domain.Cafe
+import com.jigeumopen.jigeum.domain.entity.Cafe
 import java.math.BigDecimal
 import java.time.LocalTime
 

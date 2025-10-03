@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.external.config
+package com.jigeumopen.jigeum.infrastructure.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean

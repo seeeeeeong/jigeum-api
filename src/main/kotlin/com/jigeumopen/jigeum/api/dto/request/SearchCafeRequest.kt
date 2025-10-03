@@ -1,9 +1,9 @@
-package com.jigeumopen.jigeum.external.dto
+package com.jigeumopen.jigeum.api.dto.request
 
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-data class CafeSearchRequest(
+data class SearchCafeRequest(
     val latitude: Double,
     val longitude: Double,
     val radius: Int = DEFAULT_RADIUS,
