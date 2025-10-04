@@ -2,7 +2,7 @@ package com.jigeumopen.jigeum.api
 
 import com.jigeumopen.jigeum.api.exception.BusinessException
 import com.jigeumopen.jigeum.api.exception.ErrorCode
-import com.jigeumopen.jigeum.api.exception.ErrorResponse
+import com.jigeumopen.jigeum.api.dto.response.ErrorResponse
 import com.jigeumopen.jigeum.external.exception.GooglePlacesException
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory

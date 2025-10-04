@@ -1,6 +1,7 @@
-package com.jigeumopen.jigeum.api.exception
+package com.jigeumopen.jigeum.api.dto.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.jigeumopen.jigeum.api.exception.BusinessException
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
 
