@@ -13,58 +13,40 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class CafeService(
-    private val repository: CafeRepository,
+    private val cafeRepository: CafeRepository,
     private val geometryUtils: GeometryUtils
 ) {
     fun getAll(): List<CafeResponse> =
-        repository.findAll().map { CafeResponse.from(it) }
+        cafeRepository.findAll().map { CafeResponse.from(it) }
 
     fun get(id: Long): CafeResponse =
-        repository.findById(id)
+        cafeRepository.findById(id)
             .map { CafeResponse.from(it) }
             .orElseThrow { BusinessException(ErrorCode.CAFE_NOT_FOUND) }
 
     @Transactional
     fun create(request: CreateCafeRequest): CafeResponse {
-        validate(request)
-        checkDuplicate(request.name)
-
         val cafe = buildCafe(request)
-        return CafeResponse.from(repository.save(cafe))
+        return CafeResponse.from(cafeRepository.save(cafe))
     }
 
     @Transactional
     fun update(id: Long, request: CreateCafeRequest): CafeResponse {
-        val existing = repository.findById(id)
+        val cafe = cafeRepository.findById(id)
             .orElseThrow { BusinessException(ErrorCode.CAFE_NOT_FOUND) }
 
-        validate(request)
-        if (existing.name != request.name) checkDuplicate(request.name)
-
-        val updated = buildCafe(request, existing.id)
-        return CafeResponse.from(repository.save(updated))
+        val updated = buildCafe(request, cafe.id)
+        return CafeResponse.from(cafeRepository.save(updated))
     }
 
     @Transactional
     fun delete(id: Long) {
-        if (!repository.existsById(id)) {
-            throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
-        }
-        repository.deleteById(id)
-    }
+        cafeRepository.findById(id)
+            .orElseThrow { BusinessException(ErrorCode.CAFE_NOT_FOUND) }
 
-    private fun validate(request: CreateCafeRequest) {
-        if (request.openTime != null && request.openTime >= request.closeTime) {
-            throw BusinessException(ErrorCode.INVALID_BUSINESS_HOURS)
-        }
+        cafeRepository.deleteById(id)
     }
-
-    private fun checkDuplicate(name: String) {
-        if (repository.existsByName(name)) {
-            throw BusinessException(ErrorCode.DUPLICATE_CAFE)
-        }
-    }
-
+    
     private fun buildCafe(request: CreateCafeRequest, id: Long? = null) = Cafe(
         id = id,
         name = request.name,

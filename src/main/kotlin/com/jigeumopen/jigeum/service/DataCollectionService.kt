@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.scheduler.Schedulers
 import java.math.BigDecimal
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.concurrent.atomic.AtomicInteger
@@ -32,160 +31,93 @@ class DataCollectionService(
     @Transactional
     fun collectCafesInArea(latitude: Double, longitude: Double, radius: Int): Int {
         collectionInProgress.incrementAndGet()
-
         return try {
             val places = fetchCafesFromGoogle(latitude, longitude, radius)
-            val savedCount = saveCafes(places)
+            val savedCount = saveNewCafes(places)
             totalCollected.addAndGet(savedCount)
             savedCount
-        } catch (e: Exception) {
-            throw BusinessException(ErrorCode.GOOGLE_API_ERROR)
+        } catch (ex: Exception) {
+            throw BusinessException(ErrorCode.GOOGLE_API_ERROR, ex)
         } finally {
             collectionInProgress.decrementAndGet()
         }
     }
 
-    fun collectAllSeoulCafes(): Map<String, Int> {
-
-        val results = mutableMapOf<String, Int>()
-
-        SeoulLocations.GRID_POINTS.forEach { location ->
-            try {
-                Thread.sleep(COLLECTION_DELAY_MS)
-                val count = collectCafesInArea(
-                    location.latitude,
-                    location.longitude,
-                    3000
-                )
-                results[location.name] = count
-            } catch (e: Exception) {
-                results[location.name] = 0
-            }
+    fun collectAllSeoulCafes(): Map<String, Int> =
+        SeoulLocations.GRID_POINTS.associate { location ->
+            Thread.sleep(COLLECTION_DELAY_MS)
+            val count = runCatching {
+                collectCafesInArea(location.latitude, location.longitude, 3000)
+            }.getOrDefault(0)
+            location.name to count
         }
 
-        return results
-    }
+    fun getCollectionStatus(): Map<String, Any> = mapOf(
+        "inProgress" to collectionInProgress.get(),
+        "totalCollected" to totalCollected.get(),
+        "totalCafes" to cafeRepository.count(),
+        "openNow" to cafeRepository.countByCloseTimeAfter(LocalTime.now()),
+        "lastUpdate" to LocalTime.now()
+    )
 
-    fun getCollectionStatus(): Map<String, Any> {
-        val totalCafes = cafeRepository.count()
-        val openNow = cafeRepository.countOpenCafesAt(LocalTime.now())
-
-        return mapOf(
-            "inProgress" to collectionInProgress.get(),
-            "totalCollected" to totalCollected.get(),
-            "totalCafes" to totalCafes,
-            "openNow" to openNow,
-            "lastUpdate" to LocalTime.now()
-        )
-    }
-
-    private fun fetchCafesFromGoogle(
-        latitude: Double,
-        longitude: Double,
-        radius: Int
-    ): List<Place> {
-        return googlePlacesClient.searchNearbyCafes(
-            latitude,
-            longitude,
-            radius.toDouble()
-        )
-            .flatMapMany { response ->
-                Flux.fromIterable(response.places ?: emptyList())
-            }
-            .filter { place -> isValidPlace(place) }
+    private fun fetchCafesFromGoogle(lat: Double, lng: Double, radius: Int): List<Place> =
+        googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble())
+            .flatMapMany { Flux.fromIterable(it.places.orEmpty()) }
+            .filter { it.isValid() }
             .collectList()
             .subscribeOn(Schedulers.boundedElastic())
-            .block() ?: emptyList()
-    }
+            .block().orEmpty()
 
-    private fun saveCafes(places: List<Place>): Int {
-        val newCafes = places
-            .filter { place ->
-                val name = place.displayName?.text ?: ""
-                name.isNotBlank() && !cafeRepository.existsByName(name)
+    private fun saveNewCafes(places: List<Place>): Int =
+        places.asSequence()
+            .mapNotNull { convertToCafe(it) }
+            .filterNot { cafeRepository.existsByName(it.name) }
+            .toList()
+            .let { newCafes ->
+                if (newCafes.isEmpty()) 0
+                else cafeRepository.saveAll(newCafes).size
             }
-            .mapNotNull { place -> convertToCafe(place) }
 
-        return if (newCafes.isNotEmpty()) {
-            val saved = cafeRepository.saveAll(newCafes)
-            saved.size
-        } else {
-            0
-        }
-    }
+    private fun convertToCafe(place: Place): Cafe? = runCatching {
+        val name = place.displayName?.text ?: return null
+        val lat = place.location?.latitude ?: return null
+        val lng = place.location?.longitude ?: return null
 
-    private fun convertToCafe(place: Place): Cafe? {
-        return try {
-            val name = place.displayName?.text ?: return null
-            val lat = place.location?.latitude ?: return null
-            val lng = place.location?.longitude ?: return null
+        Cafe(
+            name = name,
+            address = place.formattedAddress,
+            phone = formatPhoneNumber(place.nationalPhoneNumber),
+            latitude = BigDecimal.valueOf(lat),
+            longitude = BigDecimal.valueOf(lng),
+            location = geometryUtils.createPoint(lng, lat),
+            openTime = extractOpenTime(place.regularOpeningHours),
+            closeTime = extractCloseTime(place.regularOpeningHours) ?: LocalTime.of(22, 0),
+            category = extractCategory(place.types),
+            rating = place.rating?.let { BigDecimal.valueOf(it) }
+        )
+    }.getOrNull()
 
-            val openTime = extractOpenTime(place.regularOpeningHours)
-            val closeTime = extractCloseTime(place.regularOpeningHours)
-                ?: LocalTime.of(22, 0)
+    private fun Place.isValid(): Boolean =
+        !displayName?.text.isNullOrBlank() &&
+                location?.latitude != null &&
+                location?.longitude != null
 
-            Cafe(
-                name = name,
-                address = place.formattedAddress,
-                phone = formatPhoneNumber(place.nationalPhoneNumber),
-                latitude = BigDecimal.valueOf(lat),
-                longitude = BigDecimal.valueOf(lng),
-                location = geometryUtils.createPoint(lng, lat),
-                openTime = openTime,
-                closeTime = closeTime,
-                category = extractCategory(place.types),
-                rating = place.rating?.let { BigDecimal.valueOf(it) }
-            )
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    private fun isValidPlace(place: Place): Boolean {
-        return !place.displayName?.text.isNullOrBlank() &&
-                place.location?.latitude != null &&
-                place.location.longitude != null
-    }
-
-    private fun extractOpenTime(openingHours: RegularOpeningHours?): LocalTime? {
-        val todayIndex = getTodayIndex()
-        return openingHours?.periods
-            ?.find { it.open?.day == todayIndex }
+    private fun extractOpenTime(hours: RegularOpeningHours?): LocalTime? =
+        hours?.periods
+            ?.find { it.open?.day == todayIndex() }
             ?.open
-            ?.let { dayTime ->
-                LocalTime.of(dayTime.hour ?: 7, dayTime.minute ?: 0)
-            }
-    }
+            ?.let { LocalTime.of(it.hour ?: 7, it.minute ?: 0) }
 
-    private fun extractCloseTime(openingHours: RegularOpeningHours?): LocalTime? {
-        val todayIndex = getTodayIndex()
-        return openingHours?.periods
-            ?.find { period ->
-                period.close?.day == todayIndex ||
-                        (period.open?.day == todayIndex && period.close == null)
-            }
+    private fun extractCloseTime(hours: RegularOpeningHours?): LocalTime? =
+        hours?.periods
+            ?.find { it.close?.day == todayIndex() || (it.open?.day == todayIndex() && it.close == null) }
             ?.close
-            ?.let { dayTime ->
-                LocalTime.of(dayTime.hour ?: 22, dayTime.minute ?: 0)
-            }
-    }
+            ?.let { LocalTime.of(it.hour ?: 22, it.minute ?: 0) }
 
-    private fun getTodayIndex(): Int {
-        return when (LocalDate.now().dayOfWeek) {
-            DayOfWeek.SUNDAY -> 0
-            DayOfWeek.MONDAY -> 1
-            DayOfWeek.TUESDAY -> 2
-            DayOfWeek.WEDNESDAY -> 3
-            DayOfWeek.THURSDAY -> 4
-            DayOfWeek.FRIDAY -> 5
-            DayOfWeek.SATURDAY -> 6
-        }
-    }
+    private fun todayIndex(): Int = LocalDate.now().dayOfWeek.value % 7
 
-    private fun formatPhoneNumber(phone: String?): String? {
-        return phone?.replace(Regex("\\s+"), "-")
-            ?.replace(Regex("^\\+82"), "0")
-    }
+    private fun formatPhoneNumber(phone: String?): String? =
+        phone?.replace(Regex("\\s+"), "-")?.replace(Regex("^\\+82"), "0")
 
     private fun extractCategory(types: List<String>?): String {
         val categoryMap = mapOf(
@@ -195,11 +127,6 @@ class DataCollectionService(
             "bakery" to "베이커리카페",
             "dessert" to "디저트카페"
         )
-
-        types?.forEach { type ->
-            categoryMap[type]?.let { return it }
-        }
-
-        return "카페"
+        return types?.firstNotNullOfOrNull { categoryMap[it] } ?: "카페"
     }
 }

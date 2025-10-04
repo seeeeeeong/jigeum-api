@@ -5,7 +5,6 @@ import com.jigeumopen.jigeum.api.dto.response.CafeResponse
 import com.jigeumopen.jigeum.api.dto.response.PageResponse
 import com.jigeumopen.jigeum.api.exception.BusinessException
 import com.jigeumopen.jigeum.api.exception.ErrorCode
-import com.jigeumopen.jigeum.common.constants.CafeConstants.Search
 import com.jigeumopen.jigeum.domain.repository.CafeRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -19,9 +18,6 @@ class CafeSearchService(
     private val repository: CafeRepository
 ) {
     fun searchNearby(request: SearchCafeRequest): PageResponse<CafeResponse> {
-        validateRadius(request.radius)
-        validatePage(request.page, request.size)
-
         val time = parseTime(request.time)
         val offset = request.page * request.size
 
@@ -42,8 +38,6 @@ class CafeSearchService(
     }
 
     fun searchByName(keyword: String, page: Int, size: Int): PageResponse<CafeResponse> {
-        validatePage(page, size)
-
         val pageable = PageRequest.of(page, size)
         val cafes = repository.findByNameContainingIgnoreCase(keyword, pageable)
 
@@ -57,8 +51,6 @@ class CafeSearchService(
     }
 
     fun searchByCategory(category: String, page: Int, size: Int): PageResponse<CafeResponse> {
-        validatePage(page, size)
-
         val pageable = PageRequest.of(page, size)
         val cafes = repository.findByCategory(category, pageable)
 
@@ -71,17 +63,6 @@ class CafeSearchService(
         )
     }
 
-    private fun validateRadius(radius: Int) {
-        if (radius !in Search.MIN_RADIUS_METERS..Search.MAX_RADIUS_METERS) {
-            throw BusinessException(ErrorCode.INVALID_SEARCH_RADIUS)
-        }
-    }
-
-    private fun validatePage(page: Int, size: Int) {
-        if (page < 0 || size !in Search.MIN_PAGE_SIZE..Search.MAX_PAGE_SIZE) {
-            throw BusinessException(ErrorCode.INVALID_PAGING_PARAMETER)
-        }
-    }
 
     private fun parseTime(timeStr: String): LocalTime {
         return try {
