@@ -47,7 +47,4 @@ enum class ErrorCode(
     GOOGLE_API_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "CAFE-503-002", "Google Places API 호출에 실패했습니다"),
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "CAFE-503-003", "서비스를 일시적으로 사용할 수 없습니다");
 
-    fun withDetail(detail: String): String {
-        return "$message - $detail"
-    }
 }

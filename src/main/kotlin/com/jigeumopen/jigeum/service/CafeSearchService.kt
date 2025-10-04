@@ -7,7 +7,6 @@ import com.jigeumopen.jigeum.api.exception.BusinessException
 import com.jigeumopen.jigeum.api.exception.ErrorCode
 import com.jigeumopen.jigeum.common.constants.CafeConstants.Search
 import com.jigeumopen.jigeum.domain.repository.CafeRepository
-import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,24 +16,20 @@ import java.time.format.DateTimeParseException
 @Service
 @Transactional(readOnly = true)
 class CafeSearchService(
-    private val cafeRepository: CafeRepository
+    private val repository: CafeRepository
 ) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+    fun searchNearby(request: SearchCafeRequest): PageResponse<CafeResponse> {
+        validateRadius(request.radius)
+        validatePage(request.page, request.size)
 
-    fun searchNearbyOpenCafes(request: SearchCafeRequest): PageResponse<CafeResponse> {
-        validateSearchRequest(request)
-
-        val requiredTime = parseTime(request.time)
+        val time = parseTime(request.time)
         val offset = request.page * request.size
 
-        logger.debug("검색 파라미터: lat=${request.lat}, lng=${request.lng}, " +
-                "radius=${request.radius}, time=$requiredTime, page=${request.page}")
-
-        val cafes = cafeRepository.findNearbyOpenCafes(
+        val cafes = repository.findNearbyOpenCafes(
             latitude = request.lat,
             longitude = request.lng,
             radius = request.radius,
-            requiredTime = requiredTime,
+            requiredTime = time,
             limit = request.size,
             offset = offset
         )
@@ -47,10 +42,10 @@ class CafeSearchService(
     }
 
     fun searchByName(keyword: String, page: Int, size: Int): PageResponse<CafeResponse> {
-        validatePageRequest(page, size)
+        validatePage(page, size)
 
         val pageable = PageRequest.of(page, size)
-        val cafes = cafeRepository.findByNameContainingIgnoreCase(keyword, pageable)
+        val cafes = repository.findByNameContainingIgnoreCase(keyword, pageable)
 
         return PageResponse(
             content = cafes.content.map { CafeResponse.from(it) },
@@ -62,10 +57,10 @@ class CafeSearchService(
     }
 
     fun searchByCategory(category: String, page: Int, size: Int): PageResponse<CafeResponse> {
-        validatePageRequest(page, size)
+        validatePage(page, size)
 
         val pageable = PageRequest.of(page, size)
-        val cafes = cafeRepository.findByCategory(category, pageable)
+        val cafes = repository.findByCategory(category, pageable)
 
         return PageResponse(
             content = cafes.content.map { CafeResponse.from(it) },
@@ -76,22 +71,15 @@ class CafeSearchService(
         )
     }
 
-    private fun validateSearchRequest(request: SearchCafeRequest) {
-        if (request.radius !in Search.MIN_RADIUS_METERS..Search.MAX_RADIUS_METERS) {
-            throw BusinessException(
-                ErrorCode.INVALID_SEARCH_RADIUS,
-                "입력값: ${request.radius}m"
-            )
+    private fun validateRadius(radius: Int) {
+        if (radius !in Search.MIN_RADIUS_METERS..Search.MAX_RADIUS_METERS) {
+            throw BusinessException(ErrorCode.INVALID_SEARCH_RADIUS)
         }
-        validatePageRequest(request.page, request.size)
     }
 
-    private fun validatePageRequest(page: Int, size: Int) {
+    private fun validatePage(page: Int, size: Int) {
         if (page < 0 || size !in Search.MIN_PAGE_SIZE..Search.MAX_PAGE_SIZE) {
-            throw BusinessException(
-                ErrorCode.INVALID_PAGING_PARAMETER,
-                "page: $page, size: $size"
-            )
+            throw BusinessException(ErrorCode.INVALID_PAGING_PARAMETER)
         }
     }
 
@@ -99,10 +87,7 @@ class CafeSearchService(
         return try {
             LocalTime.parse(timeStr)
         } catch (e: DateTimeParseException) {
-            throw BusinessException(
-                ErrorCode.INVALID_TIME_FORMAT,
-                "입력값: $timeStr"
-            )
+            throw BusinessException(ErrorCode.INVALID_TIME_FORMAT, e)
         }
     }
 }

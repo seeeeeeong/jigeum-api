@@ -12,7 +12,6 @@ import java.time.LocalTime
 @Repository
 interface CafeRepository : JpaRepository<Cafe, Long> {
 
-    // 위치 기반 검색
     @Query(value = """
         SELECT c.* FROM cafes c 
         WHERE ST_DWithin(
@@ -36,16 +35,12 @@ interface CafeRepository : JpaRepository<Cafe, Long> {
         @Param("offset") offset: Int
     ): List<Cafe>
 
-    // 이름으로 검색 (페이징)
     fun findByNameContainingIgnoreCase(name: String, pageable: Pageable): Page<Cafe>
 
-    // 카테고리로 검색 (페이징)
     fun findByCategory(category: String, pageable: Pageable): Page<Cafe>
 
-    // 중복 체크
     fun existsByName(name: String): Boolean
 
-    // 통계 쿼리
     @Query("SELECT COUNT(c) FROM Cafe c WHERE c.closeTime >= :time")
     fun countOpenCafesAt(@Param("time") time: LocalTime): Long
 
