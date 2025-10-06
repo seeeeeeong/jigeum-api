@@ -12,7 +12,7 @@ description = "Demo project for Spring Boot"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -29,13 +29,12 @@ dependencies {
 	implementation("net.postgis:postgis-jdbc:2.5.1")
 	implementation("org.locationtech.jts:jts-core:1.19.0")
 	implementation("org.hibernate:hibernate-spatial:6.6.29.Final")
-	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 	implementation("org.springframework.boot:spring-boot-configuration-processor")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
-	runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -56,4 +55,12 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType<JavaExec> {
+	jvmArgs = listOf("-Djdk.virtualThreadScheduler.parallelism=100")
+}
+
+tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+	jvmArgs = listOf("-Djdk.virtualThreadScheduler.parallelism=100")
 }

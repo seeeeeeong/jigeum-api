@@ -1,27 +1,32 @@
 package com.jigeumopen.jigeum.cafe.client
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.jigeumopen.jigeum.cafe.dto.*
 import com.jigeumopen.jigeum.common.config.GooglePlacesConfig
 import com.jigeumopen.jigeum.common.exception.BusinessException
 import com.jigeumopen.jigeum.common.exception.ErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import reactor.core.publisher.Mono
-import reactor.util.retry.Retry
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 @Component
 class GooglePlacesClient(
     private val config: GooglePlacesConfig,
-    webClientBuilder: WebClient.Builder
+    private val objectMapper: ObjectMapper
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    private val webClient = webClientBuilder
-        .baseUrl(config.baseUrl)
-        .codecs { it.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }
+    private val httpClient = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_2)
+        .connectTimeout(Duration.ofSeconds(config.timeoutSeconds))
         .build()
 
     companion object {
@@ -39,11 +44,11 @@ class GooglePlacesClient(
         private val FIELD_MASK = FIELD_MASKS.joinToString(",")
     }
 
-    fun searchNearbyCafesReactive(
+    fun searchNearbyCafes(
         latitude: Double,
         longitude: Double,
         radius: Double
-    ): Mono<SearchNearbyResponse> {
+    ): SearchNearbyResponse {
         validateCoordinates(latitude, longitude)
         validateRadius(radius)
 
@@ -59,81 +64,75 @@ class GooglePlacesClient(
             languageCode = config.language
         )
 
-        return executeRequest {
-            webClient.post()
-                .uri("/v1/places:searchNearby")
+        return executeWithRetry(config.maxRetries.toInt()) {
+            val httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create("${config.baseUrl}/v1/places:searchNearby"))
                 .header("X-Goog-Api-Key", config.apiKey)
                 .header("X-Goog-FieldMask", FIELD_MASK)
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(SearchNearbyResponse::class.java)
-        }.doOnSuccess { response ->
-            logger.debug("Successfully fetched ${response.places?.size ?: 0} cafes near ($latitude, $longitude)")
-        }
-    }
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requireNotNull(objectMapper.writeValueAsString(request))))
+                .timeout(Duration.ofSeconds(config.timeoutSeconds))
+                .build()
 
-    fun searchNearbyCafes(
-        latitude: Double,
-        longitude: Double,
-        radius: Double
-    ): SearchNearbyResponse {
-        return searchNearbyCafesReactive(latitude, longitude, radius)
-            .block() ?: throw BusinessException(ErrorCode.GOOGLE_API_ERROR)
-    }
+            val response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
-    private fun <T> executeRequest(request: () -> Mono<T>): Mono<T> {
-        return request()
-            .timeout(Duration.ofSeconds(config.timeoutSeconds))
-            .retryWhen(createRetrySpec())
-            .onErrorMap(::mapToBusinessException)
-    }
-
-    private fun createRetrySpec(): Retry {
-        return Retry.backoff(config.maxRetries.toLong(), Duration.ofSeconds(1))
-            .maxBackoff(Duration.ofSeconds(10))
-            .filter(::shouldRetry)
-            .doBeforeRetry { signal ->
-                logger.warn(
-                    "Retrying Google API request (attempt ${signal.totalRetries() + 1}/${config.maxRetries}): ${signal.failure()?.message}"
-                )
+            when (response.statusCode()) {
+                200 -> objectMapper.readValue<SearchNearbyResponse>(response.body())
+                400 -> throw BusinessException(ErrorCode.INVALID_PARAMETER, response.body())
+                401, 403 -> throw BusinessException(ErrorCode.INVALID_API_KEY, response.body())
+                404 -> throw BusinessException(ErrorCode.RESOURCE_NOT_FOUND, response.body())
+                429 -> throw BusinessException(ErrorCode.GOOGLE_API_RATE_LIMIT, response.body())
+                in 500..599 -> throw BusinessException(ErrorCode.GOOGLE_API_ERROR, response.body())
+                else -> {
+                    logger.error("Unexpected Google API response: status=${response.statusCode()}, body=${response.body()}")
+                    throw BusinessException(ErrorCode.EXTERNAL_API_ERROR, response.body())
+                }
             }
-            .onRetryExhaustedThrow { _, signal ->
-                BusinessException(ErrorCode.GOOGLE_API_RATE_LIMIT, signal.failure())
+        }
+    }
+
+    private fun <T> executeWithRetry(maxRetries: Int, block: () -> T): T {
+        var lastException: Throwable? = null
+
+        for (attempt in 0 until maxRetries) {
+            try {
+                return block()
+            } catch (e: BusinessException) {
+                lastException = e
+                if (e.errorCode in listOf(ErrorCode.GOOGLE_API_RATE_LIMIT, ErrorCode.GOOGLE_API_ERROR)) {
+                    if (attempt < maxRetries - 1) {
+                        val delay = minOf(1000L * (1 shl attempt), 10000L)
+                        logger.warn("Retry attempt ${attempt + 1}/$maxRetries after ${delay}ms: ${e.message}")
+                        TimeUnit.MILLISECONDS.sleep(delay)
+                    }
+                } else {
+                    throw e
+                }
+            } catch (e: IOException) {
+                lastException = e
+                if (attempt < maxRetries - 1) {
+                    val delay = 1000L * (attempt + 1)
+                    logger.warn("Network error, retry attempt ${attempt + 1}/$maxRetries after ${delay}ms", e)
+                    TimeUnit.MILLISECONDS.sleep(delay)
+                }
+            } catch (e: SocketTimeoutException) {
+                lastException = e
+                if (attempt < maxRetries - 1) {
+                    val delay = 1000L * (attempt + 1)
+                    logger.warn("Timeout, retry attempt ${attempt + 1}/$maxRetries after ${delay}ms", e)
+                    TimeUnit.MILLISECONDS.sleep(delay)
+                }
+            } catch (e: Exception) {
+                lastException = e
+                if (attempt < maxRetries - 1) {
+                    val delay = 1000L * (attempt + 1)
+                    logger.warn("Unknown error, retry attempt ${attempt + 1}/$maxRetries after ${delay}ms", e)
+                    TimeUnit.MILLISECONDS.sleep(delay)
+                }
             }
-    }
-
-    private fun shouldRetry(throwable: Throwable): Boolean {
-        return when (throwable) {
-            is WebClientResponseException -> {
-                throwable.statusCode.is5xxServerError || throwable.statusCode.value() == 429
-            }
-
-            else -> false
         }
-    }
 
-    private fun mapToBusinessException(error: Throwable): Throwable {
-        return when (error) {
-            is BusinessException -> error
-            is WebClientResponseException -> handleWebClientError(error)
-            else -> BusinessException(ErrorCode.EXTERNAL_API_ERROR, error)
-        }
-    }
-
-    private fun handleWebClientError(error: WebClientResponseException): BusinessException {
-        val statusCode = error.statusCode.value()
-        val responseBody = error.responseBodyAsString
-
-        logger.error("Google Places API error: status=$statusCode, body=$responseBody")
-
-        return when (statusCode) {
-            400 -> BusinessException(ErrorCode.INVALID_PARAMETER, error)
-            401, 403 -> BusinessException(ErrorCode.INVALID_API_KEY, error)
-            404 -> BusinessException(ErrorCode.RESOURCE_NOT_FOUND, error)
-            429 -> BusinessException(ErrorCode.GOOGLE_API_RATE_LIMIT, error)
-            in 500..599 -> BusinessException(ErrorCode.GOOGLE_API_ERROR, error)
-            else -> BusinessException(ErrorCode.EXTERNAL_API_ERROR, error)
-        }
+        throw BusinessException(ErrorCode.GOOGLE_API_ERROR, requireNotNull(lastException))
     }
 
     private fun validateCoordinates(latitude: Double, longitude: Double) {

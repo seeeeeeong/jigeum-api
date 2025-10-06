@@ -17,13 +17,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
-import reactor.core.scheduler.Schedulers
 import java.math.BigDecimal
-import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
 @Service
@@ -38,43 +36,7 @@ class DataCollectionService(
 
     companion object {
         private const val SEOUL_COLLECTION_RADIUS = 3000
-        private const val BATCH_SIZE = 100
     }
-
-
-    @Transactional
-    fun collectCafesInAreaReactive(
-        latitude: Double,
-        longitude: Double,
-        radius: Int
-    ): Mono<AreaCollectionResponse> {
-        collectionInProgress.incrementAndGet()
-
-        return fetchCafesFromGoogleApi(latitude, longitude, radius)
-            .flatMap { places -> saveNewCafesReactive(places) }
-            .doOnNext { savedCount ->
-                totalCollected.addAndGet(savedCount)
-                logger.info("Collected $savedCount new cafes at ($latitude, $longitude) with radius ${radius}m")
-            }
-            .map { savedCount ->
-                AreaCollectionResponse(
-                    savedCount = savedCount,
-                    location = "$latitude,$longitude",
-                    radius = radius
-                )
-            }
-            .doOnError { ex ->
-                logger.error("Failed to collect cafes at ($latitude, $longitude): ${ex.message}", ex)
-            }
-            .doFinally { collectionInProgress.decrementAndGet() }
-            .onErrorMap { ex ->
-                when (ex) {
-                    is BusinessException -> ex
-                    else -> BusinessException(ErrorCode.SEARCH_ERROR, ex)
-                }
-            }
-    }
-
 
     @Transactional
     fun collectCafesInArea(
@@ -82,8 +44,29 @@ class DataCollectionService(
         longitude: Double,
         radius: Int
     ): AreaCollectionResponse {
-        return collectCafesInAreaReactive(latitude, longitude, radius)
-            .block() ?: throw BusinessException(ErrorCode.SEARCH_ERROR)
+        collectionInProgress.incrementAndGet()
+
+        return try {
+            val places = fetchCafesFromGoogleApi(latitude, longitude, radius)
+            val savedCount = saveNewCafes(places)
+
+            totalCollected.addAndGet(savedCount)
+            logger.info("Collected $savedCount new cafes at ($latitude, $longitude) with radius ${radius}m")
+
+            AreaCollectionResponse(
+                savedCount = savedCount,
+                location = "$latitude,$longitude",
+                radius = radius
+            )
+        } catch (ex: Exception) {
+            logger.error("Failed to collect cafes at ($latitude, $longitude): ${ex.message}", ex)
+            throw when (ex) {
+                is BusinessException -> ex
+                else -> BusinessException(ErrorCode.SEARCH_ERROR, ex)
+            }
+        } finally {
+            collectionInProgress.decrementAndGet()
+        }
     }
 
     fun collectAllCafes(): BatchCollectionResponse {
@@ -91,41 +74,42 @@ class DataCollectionService(
         logger.info("Starting Seoul-wide cafe collection for $locationCount locations")
 
         val startTime = System.currentTimeMillis()
-        val results = mutableMapOf<String, Int>()
+        val results = ConcurrentHashMap<String, Int>()
 
-        try {
-            Flux.fromIterable(SeoulLocations.GRID_POINTS)
-                .delayElements(Duration.ofMillis(COLLECTION_DELAY_MS))
-                .flatMap { location ->
-                    collectCafesInAreaReactive(
-                        location.latitude,
-                        location.longitude,
-                        SEOUL_COLLECTION_RADIUS
-                    )
-                        .map { response -> location.name to response.savedCount }
-                        .onErrorResume { ex ->
-                            logger.warn("Failed to collect cafes in ${location.name}: ${ex.message}")
-                            Mono.just(location.name to 0)
-                        }
+        // Virtual Thread 기반 병렬 처리
+        Executors.newVirtualThreadPerTaskExecutor().use { executor ->
+            val futures = SeoulLocations.GRID_POINTS.map { location ->
+                executor.submit {
+                    try {
+                        Thread.sleep(COLLECTION_DELAY_MS) // Rate limiting
+                        val response = collectCafesInArea(
+                            location.latitude,
+                            location.longitude,
+                            SEOUL_COLLECTION_RADIUS
+                        )
+                        results[location.name] = response.savedCount
+                        logger.debug("Completed collection for ${location.name}: ${response.savedCount} cafes")
+                    } catch (ex: Exception) {
+                        logger.warn("Failed to collect cafes in ${location.name}: ${ex.message}")
+                        results[location.name] = 0
+                    }
                 }
-                .subscribeOn(Schedulers.boundedElastic())
-                .doOnNext { (name, count) -> results[name] = count }
-                .blockLast()
+            }
 
-            val duration = System.currentTimeMillis() - startTime
-            val totalCount = results.values.sum()
-
-            logger.info("Completed Seoul-wide collection: $totalCount cafes in ${results.size} locations (${duration}ms)")
-
-            return BatchCollectionResponse(
-                results = results,
-                totalCount = totalCount,
-                locations = results.size
-            )
-        } catch (ex: Exception) {
-            logger.error("Seoul-wide collection failed: ${ex.message}", ex)
-            throw BusinessException(ErrorCode.SEARCH_ERROR, ex)
+            // 모든 작업 완료 대기
+            futures.forEach { it.get() }
         }
+
+        val duration = System.currentTimeMillis() - startTime
+        val totalCount = results.values.sum()
+
+        logger.info("Completed Seoul-wide collection: $totalCount cafes in ${results.size} locations (${duration}ms)")
+
+        return BatchCollectionResponse(
+            results = results,
+            totalCount = totalCount,
+            locations = results.size
+        )
     }
 
     fun getCollectionStatus(): CollectionStatusResponse {
@@ -143,56 +127,41 @@ class DataCollectionService(
         }
     }
 
-    private fun fetchCafesFromGoogleApi(
-        lat: Double,
-        lng: Double,
-        radius: Int
-    ): Mono<List<Place>> {
-        return googlePlacesClient.searchNearbyCafesReactive(lat, lng, radius.toDouble())
-            .flatMapMany { response -> Flux.fromIterable(response.places.orEmpty()) }
-            .filter { it.hasRequiredFields() }
-            .collectList()
-            .subscribeOn(Schedulers.boundedElastic())
+    private fun fetchCafesFromGoogleApi(lat: Double, lng: Double, radius: Int): List<Place> {
+        val response = googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble())
+        return response.places.orEmpty().filter { it.hasRequiredFields() }
     }
 
-    private fun saveNewCafesReactive(places: List<Place>): Mono<Int> {
-        return Mono.fromCallable {
-            val cafes = places.mapNotNull { place -> convertToCafe(place) }
+    private fun saveNewCafes(places: List<Place>): Int {
+        val cafes = places.mapNotNull { place -> convertToCafe(place) }
 
-            if (cafes.isEmpty()) {
-                logger.debug("No valid cafes to save from ${places.size} places")
-                return@fromCallable 0
+        if (cafes.isEmpty()) {
+            logger.debug("No valid cafes to save from ${places.size} places")
+            return 0
+        }
+
+        return try {
+            val existingNames = cafeRepository.findNamesByNameIn(cafes.map { it.name }).toSet()
+            val newCafes = cafes.filterNot { cafe -> existingNames.contains(cafe.name) }
+
+            if (newCafes.isEmpty()) {
+                logger.debug("All ${cafes.size} cafes already exist in database")
+                return 0
             }
 
-            try {
-                val existingNames = cafeRepository.findNamesByNameIn(cafes.map { it.name }).toSet()
-                val newCafes = cafes.filterNot { cafe -> existingNames.contains(cafe.name) }
-
-                if (newCafes.isEmpty()) {
-                    logger.debug("All ${cafes.size} cafes already exist in database")
-                    return@fromCallable 0
-                }
-
-                val savedCafes = cafeRepository.saveAll(newCafes)
-                logger.debug("Saved ${savedCafes.size} new cafes out of ${cafes.size} total")
-                savedCafes.size
-            } catch (ex: DataAccessException) {
-                logger.error("Database error while saving cafes: ${ex.message}", ex)
-                throw BusinessException(ErrorCode.SAVE_ERROR, ex)
-            } catch (ex: Exception) {
-                logger.error("Unexpected error while saving cafes: ${ex.message}", ex)
-                throw BusinessException(ErrorCode.SAVE_ERROR, ex)
-            }
-        }.subscribeOn(Schedulers.boundedElastic())
+            val savedCafes = cafeRepository.saveAll(newCafes)
+            logger.debug("Saved ${savedCafes.size} new cafes out of ${cafes.size} total")
+            savedCafes.size
+        } catch (ex: DataAccessException) {
+            logger.error("Database error while saving cafes: ${ex.message}", ex)
+            throw BusinessException(ErrorCode.SAVE_ERROR, ex)
+        }
     }
 
     private fun convertToCafe(place: Place): Cafe? = runCatching {
-        val name = place.displayName?.text?.trim()?.takeIf { it.isNotBlank() }
-            ?: return null
-        val latitude = place.location?.latitude
-            ?: return null
-        val longitude = place.location?.longitude
-            ?: return null
+        val name = place.displayName?.text?.trim()?.takeIf { it.isNotBlank() } ?: return null
+        val latitude = place.location?.latitude ?: return null
+        val longitude = place.location?.longitude ?: return null
 
         if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) {
             logger.warn("Invalid coordinates for cafe '$name': lat=$latitude, lng=$longitude")
@@ -223,7 +192,6 @@ class DataCollectionService(
                 location.longitude in -180.0..180.0
 }
 
-
 private object OpeningHoursExtractor {
     private const val DEFAULT_OPEN_HOUR = 7
     private const val DEFAULT_CLOSE_HOUR = 22
@@ -231,33 +199,23 @@ private object OpeningHoursExtractor {
 
     fun extractOpenTime(hours: RegularOpeningHours?): LocalTime? {
         val currentDay = getCurrentDayIndex()
-
-        return hours?.periods
-            ?.find { it.open?.day == currentDay }
-            ?.open
-            ?.let { openInfo ->
-                try {
-                    LocalTime.of(
-                        openInfo.hour?.coerceIn(0, 23) ?: DEFAULT_OPEN_HOUR,
-                        openInfo.minute?.coerceIn(0, 59) ?: DEFAULT_MINUTE
-                    )
-                } catch (ex: Exception) {
-                    LoggerFactory.getLogger(javaClass)
-                        .warn("Invalid open time: hour=${openInfo.hour}, minute=${openInfo.minute}")
-                    null
-                }
+        return hours?.periods?.find { it.open?.day == currentDay }?.open?.let { openInfo ->
+            try {
+                LocalTime.of(
+                    openInfo.hour?.coerceIn(0, 23) ?: DEFAULT_OPEN_HOUR,
+                    openInfo.minute?.coerceIn(0, 59) ?: DEFAULT_MINUTE
+                )
+            } catch (ex: Exception) {
+                null
             }
+        }
     }
 
     fun extractCloseTime(hours: RegularOpeningHours?): LocalTime {
         val currentDay = getCurrentDayIndex()
-
-        val closeInfo = hours?.periods
-            ?.find { period ->
-                period.close?.day == currentDay ||
-                        (period.open?.day == currentDay && period.close == null)
-            }
-            ?.close
+        val closeInfo = hours?.periods?.find { period ->
+            period.close?.day == currentDay || (period.open?.day == currentDay && period.close == null)
+        }?.close
 
         return closeInfo?.let {
             try {
@@ -266,8 +224,6 @@ private object OpeningHoursExtractor {
                     it.minute?.coerceIn(0, 59) ?: DEFAULT_MINUTE
                 )
             } catch (ex: Exception) {
-                LoggerFactory.getLogger(javaClass)
-                    .warn("Invalid close time: hour=${it.hour}, minute=${it.minute}")
                 LocalTime.of(DEFAULT_CLOSE_HOUR, DEFAULT_MINUTE)
             }
         } ?: LocalTime.of(DEFAULT_CLOSE_HOUR, DEFAULT_MINUTE)
@@ -282,12 +238,11 @@ private object PhoneNumberFormatter {
     private val INVALID_CHARS_REGEX = Regex("[^0-9-]")
 
     fun format(phoneNumber: String?): String? {
-        return phoneNumber
-            ?.trim()
+        return phoneNumber?.trim()
             ?.replace(WHITESPACE_REGEX, "-")
             ?.replace(KOREAN_COUNTRY_CODE_REGEX, "0")
             ?.replace(INVALID_CHARS_REGEX, "")
-            ?.takeIf { it.length >= 9 && it.isNotBlank() } // 최소 9자리 이상
+            ?.takeIf { it.length >= 9 && it.isNotBlank() }
     }
 }
 
@@ -303,10 +258,8 @@ private object CategoryExtractor {
     private const val DEFAULT_CATEGORY = "카페"
 
     fun extractCategory(types: List<String>?): String {
-        return types
-            ?.asSequence()
+        return types?.asSequence()
             ?.mapNotNull { type -> CATEGORY_MAP[type.lowercase()] }
-            ?.firstOrNull()
-            ?: DEFAULT_CATEGORY
+            ?.firstOrNull() ?: DEFAULT_CATEGORY
     }
 }
