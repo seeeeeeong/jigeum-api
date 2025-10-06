@@ -12,14 +12,14 @@ class Cafe(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
+    @Column(name = "place_id", nullable = false, unique = true, length = 100)
+    val placeId: String,
+
     @Column(nullable = false, length = 100)
     val name: String,
 
     @Column(length = 200)
     val address: String? = null,
-
-    @Column(length = 20)
-    val phone: String? = null,
 
     @Column(nullable = false, precision = 10, scale = 8)
     val latitude: BigDecimal,
@@ -34,11 +34,5 @@ class Cafe(
     val openTime: LocalTime? = null,
 
     @Column(name = "close_time", nullable = false)
-    val closeTime: LocalTime,
-
-    @Column(length = 50)
-    val category: String? = null,
-
-    @Column(precision = 3, scale = 2)
-    val rating: BigDecimal? = null
+    val closeTime: LocalTime
 )

@@ -3,7 +3,6 @@ package com.jigeumopen.jigeum.cafe.dto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-
 data class SearchNearbyRequest(
     val includedTypes: List<String> = listOf("cafe"),
     val maxResultCount: Int = 20,
@@ -20,14 +19,17 @@ data class Circle(
     val radius: Double
 )
 
+data class LatLng(
+    @JsonProperty("latitude")
+    val latitude: Double,
+    @JsonProperty("longitude")
+    val longitude: Double
+)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class SearchNearbyResponse(
     @JsonProperty("places")
-    val places: List<Place>? = null,
-
-    @JsonProperty("nextPageToken")
-    val nextPageToken: String? = null
+    val places: List<Place>? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -44,43 +46,20 @@ data class Place(
     @JsonProperty("location")
     val location: LatLng? = null,
 
-    @JsonProperty("nationalPhoneNumber")
-    val nationalPhoneNumber: String? = null,
-
     @JsonProperty("regularOpeningHours")
-    val regularOpeningHours: RegularOpeningHours? = null,
-
-    @JsonProperty("rating")
-    val rating: Double? = null,
-
-    @JsonProperty("types")
-    val types: List<String>? = null
+    val regularOpeningHours: RegularOpeningHours? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class LocalizedText(
     @JsonProperty("text")
-    val text: String? = null,
-
-    @JsonProperty("languageCode")
-    val languageCode: String? = null
-)
-
-data class LatLng(
-    @JsonProperty("latitude")
-    val latitude: Double,
-
-    @JsonProperty("longitude")
-    val longitude: Double
+    val text: String? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class RegularOpeningHours(
     @JsonProperty("periods")
-    val periods: List<Period>? = null,
-
-    @JsonProperty("weekdayDescriptions")
-    val weekdayDescriptions: List<String>? = null
+    val periods: List<Period>? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
