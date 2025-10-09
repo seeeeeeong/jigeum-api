@@ -3,13 +3,11 @@ package com.jigeumopen.jigeum.cafe.entity
 import jakarta.persistence.*
 import org.locationtech.jts.geom.Point
 import java.math.BigDecimal
-import java.time.LocalTime
 
 @Entity
 @Table(name = "cafes")
 class Cafe(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @Column(name = "place_id", nullable = false, unique = true, length = 100)
@@ -28,11 +26,5 @@ class Cafe(
     val longitude: BigDecimal,
 
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
-    val location: Point,
-
-    @Column(name = "open_time")
-    val openTime: LocalTime? = null,
-
-    @Column(name = "close_time", nullable = false)
-    val closeTime: LocalTime
+    val location: Point
 )
