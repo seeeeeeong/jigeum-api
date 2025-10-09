@@ -8,7 +8,7 @@ import com.jigeumopen.jigeum.cafe.entity.Cafe
 import com.jigeumopen.jigeum.cafe.entity.CafeOperatingHour
 import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
-import com.jigeumopen.jigeum.common.constants.CafeConstants.SeoulLocations
+import com.jigeumopen.jigeum.common.config.SeoulGridLocations
 import com.jigeumopen.jigeum.common.util.GeometryUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -22,71 +22,129 @@ import java.util.concurrent.Executors
 class DataCollectionService(
     private val googlePlacesClient: GooglePlacesClient,
     private val cafeRepository: CafeRepository,
-    private val cafeOperatingHourRepository: CafeOperatingHourRepository,
-    private val geometryUtils: GeometryUtils
+    private val operatingHourRepository: CafeOperatingHourRepository,
+    private val geometryUtils: GeometryUtils,
+    private val gridLocations: SeoulGridLocations
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Transactional
     fun collectCafesInArea(lat: Double, lng: Double, radius: Int): AreaCollectionResponse {
-        val nearbyPlaces = googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble()).places.orEmpty()
-        val savablePlaces = nearbyPlaces.filter { it.isSavable() }
+        logger.info("Starting collection for area: ($lat, $lng), radius: ${radius}m")
 
-        if (savablePlaces.isEmpty()) {
-            logger.info("No cafes found at ($lat,$lng)")
+        val places = fetchPlacesFromGoogle(lat, lng, radius)
+        val savableCount = places.count { it.isSavable() }
+
+        logger.debug("Found {} savable places out of {} total", savableCount, places.size)
+
+        if (savableCount == 0) {
             return AreaCollectionResponse(0, "$lat,$lng", radius)
         }
 
-        val savedCount = saveNewCafes(savablePlaces)
-        logger.info("Collected $savedCount new cafes at ($lat,$lng)")
+        val savedCount = saveCafesWithOperatingHours(places.filter { it.isSavable() })
+
+        logger.info("Successfully saved {} new cafes", savedCount)
         return AreaCollectionResponse(savedCount, "$lat,$lng", radius)
     }
 
     fun collectAllCafes(): BatchCollectionResponse {
+        logger.info("Starting batch collection for all Seoul locations")
+
         val results = ConcurrentHashMap<String, Int>()
+        val locations = gridLocations.getAll()
 
         Executors.newVirtualThreadPerTaskExecutor().use { executor ->
-            val futures = SeoulLocations.GRID_POINTS.map { location ->
+            val futures = locations.map { location ->
                 executor.submit {
-                    val count = runCatching {
-                        Thread.sleep(2000) // API rate limit 고려
-                        collectCafesInArea(location.latitude, location.longitude, 3000).savedCount
-                    }.getOrElse {
-                        logger.warn("Failed to collect cafes for ${location.name}: ${it.message}")
-                        0
-                    }
-                    results[location.name] = count
+                    collectWithRetry(location, results)
                 }
             }
             futures.forEach { it.get() }
         }
 
         val totalCount = results.values.sum()
-        return BatchCollectionResponse(results, totalCount, results.size)
+        logger.info("Batch collection completed. Total: {}, Locations: {}", totalCount, results.size)
+
+        return BatchCollectionResponse(
+            results = results,
+            totalCount = totalCount,
+            locations = results.size
+        )
     }
 
-    private fun saveNewCafes(places: List<Place>): Int {
-        val cafes = places.map { createCafeFromPlace(it) }
+    private fun collectWithRetry(
+        location: SeoulGridLocations.GridLocation,
+        results: ConcurrentHashMap<String, Int>
+    ) {
+        var attempt = 0
+        val maxAttempts = 3
 
-        val existingIds = cafeRepository.findExistingPlaceIds(cafes.map { it.placeId }).toSet()
-        val newCafes = cafes.filter { it.placeId !in existingIds }
+        while (attempt < maxAttempts) {
+            try {
+                Thread.sleep(2000L * (attempt + 1)) // Exponential backoff
 
-        if (newCafes.isEmpty()) return 0
+                val response = collectCafesInArea(
+                    location.latitude,
+                    location.longitude,
+                    3000
+                )
 
-        val savedCafes = cafeRepository.saveAll(newCafes)
-        val operatingHours = createOperatingHours(savedCafes, places)
-        cafeOperatingHourRepository.saveAll(operatingHours)
+                results[location.name] = response.savedCount
+                logger.debug("Collected {} cafes from {}", response.savedCount, location.name)
+                return
+
+            } catch (e: Exception) {
+                attempt++
+                logger.warn(
+                    "Attempt {}/{} failed for {}: {}",
+                    attempt, maxAttempts, location.name, e.message
+                )
+
+                if (attempt >= maxAttempts) {
+                    results[location.name] = 0
+                }
+            }
+        }
+    }
+
+    private fun fetchPlacesFromGoogle(lat: Double, lng: Double, radius: Int): List<Place> {
+        return try {
+            googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble())
+                .places
+                .orEmpty()
+        } catch (e: Exception) {
+            logger.error("Failed to fetch places from Google API", e)
+            emptyList()
+        }
+    }
+
+    private fun saveCafesWithOperatingHours(places: List<Place>): Int {
+        val placeIds = places.map { it.id }
+        val existingIds = cafeRepository.findExistingPlaceIds(placeIds)
+
+        val newPlaces = places.filter { it.id !in existingIds }
+
+        if (newPlaces.isEmpty()) {
+            logger.debug("No new cafes to save")
+            return 0
+        }
+
+        val cafes = newPlaces.map { createCafeEntity(it) }
+        val savedCafes = cafeRepository.saveAll(cafes)
+
+        val operatingHours = createOperatingHours(savedCafes, newPlaces)
+        operatingHourRepository.saveAll(operatingHours)
 
         return savedCafes.size
     }
 
-    private fun createCafeFromPlace(place: Place): Cafe {
-        val nameText = place.displayName?.text?.trim() ?: "Unknown Cafe"
-        val location = place.location ?: throw IllegalArgumentException("Place location is null for ${place.id}")
+    private fun createCafeEntity(place: Place): Cafe {
+        val location = place.location
+            ?: throw IllegalArgumentException("Location is required for place: ${place.id}")
 
         return Cafe(
             placeId = place.id,
-            name = nameText,
+            name = place.displayName?.text?.trim() ?: "Unknown Cafe",
             address = place.formattedAddress?.trim(),
             latitude = BigDecimal.valueOf(location.latitude),
             longitude = BigDecimal.valueOf(location.longitude),
@@ -94,30 +152,42 @@ class DataCollectionService(
         )
     }
 
-    private fun createOperatingHours(savedCafes: List<Cafe>, places: List<Place>): List<CafeOperatingHour> {
+    private fun createOperatingHours(
+        savedCafes: List<Cafe>,
+        places: List<Place>
+    ): List<CafeOperatingHour> {
         val placeMap = places.associateBy { it.id }
 
         return savedCafes.flatMap { cafe ->
-            val periods = placeMap[cafe.placeId]?.regularOpeningHours?.periods.orEmpty()
+            val periods = placeMap[cafe.placeId]
+                ?.regularOpeningHours
+                ?.periods
+                .orEmpty()
 
             periods.mapNotNull { period ->
-                val open = period.open
-                val close = period.close
-
-                // open 또는 close가 null이거나 hour/minute가 null이면 해당 요일 건너뜀
-                if (open == null || close == null ||
-                    open.hour == null || open.minute == null ||
-                    close.hour == null || close.minute == null) {
-                    return@mapNotNull null
-                }
-
-                CafeOperatingHour(
-                    cafeId = cafe.id!!,
-                    dayOfWeek = open.day,
-                    openTime = LocalTime.of(open.hour, open.minute),
-                    closeTime = LocalTime.of(close.hour, close.minute)
-                )
+                createOperatingHour(cafe.id!!, period.open, period.close)
             }
         }
+    }
+
+    private fun createOperatingHour(
+        cafeId: Long,
+        open: com.jigeumopen.jigeum.cafe.dto.DayTime?,
+        close: com.jigeumopen.jigeum.cafe.dto.DayTime?
+    ): CafeOperatingHour? {
+        if (open?.day == null || open.hour == null || open.minute == null) {
+            return null
+        }
+
+        if (close?.hour == null || close.minute == null) {
+            return null
+        }
+
+        return CafeOperatingHour.of(
+            cafeId = cafeId,
+            dayOfWeek = open.day,
+            openTime = LocalTime.of(open.hour, open.minute),
+            closeTime = LocalTime.of(close.hour, close.minute)
+        )
     }
 }

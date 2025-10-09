@@ -3,7 +3,7 @@ package com.jigeumopen.jigeum.common.constants
 object CafeConstants {
 
     object Location {
-        const val SRID = 4326  // WGS84
+        const val SRID = 4326
     }
 
     object SeoulLocations {
