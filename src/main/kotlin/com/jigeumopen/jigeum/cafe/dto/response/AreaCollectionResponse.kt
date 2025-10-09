@@ -11,11 +11,3 @@ data class BatchCollectionResponse(
     val totalCount: Int,
     val locations: Int
 )
-
-data class CollectionStatusResponse(
-    val inProgress: Int,
-    val totalCollected: Int,
-    val totalCafes: Long,
-    val openNow: Long,
-    val lastUpdate: String
-)

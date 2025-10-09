@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
@@ -25,23 +25,16 @@ class DataCollectionService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    companion object {
-        private const val COLLECTION_RADIUS = 3000
-        private const val DELAY_MS = 2000L
-        private const val DEFAULT_OPEN_HOUR = 7
-        private const val DEFAULT_CLOSE_HOUR = 22
-    }
-
     @Transactional
     fun collectCafesInArea(lat: Double, lng: Double, radius: Int): AreaCollectionResponse {
-        val places = googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble())
-            .places
-            ?.filter { it.isValid() }
-            ?: emptyList()
+        val places = googlePlacesClient.searchNearbyCafes(lat, lng, radius.toDouble()).places
+        if (places == null || places.isEmpty()) {
+            logger.info("No cafes found at ($lat, $lng)")
+            return AreaCollectionResponse(0, "$lat,$lng", radius)
+        }
 
-        val savedCount = saveCafes(places)
-        logger.info("Collected $savedCount cafes at ($lat, $lng)")
-
+        val savedCount = saveNewCafes(places)
+        logger.info("Collected $savedCount new cafes at ($lat, $lng)")
         return AreaCollectionResponse(savedCount, "$lat,$lng", radius)
     }
 
@@ -49,90 +42,72 @@ class DataCollectionService(
         val results = ConcurrentHashMap<String, Int>()
 
         Executors.newVirtualThreadPerTaskExecutor().use { executor ->
-            SeoulLocations.GRID_POINTS.map { location ->
+            val futures = SeoulLocations.GRID_POINTS.map { location ->
                 executor.submit {
                     try {
-                        Thread.sleep(DELAY_MS)
-                        val response = collectCafesInArea(
-                            location.latitude,
-                            location.longitude,
-                            COLLECTION_RADIUS
-                        )
-                        results[location.name] = response.savedCount
+                        Thread.sleep(2000)
+                        val count = collectCafesInArea(location.latitude, location.longitude, 3000).savedCount
+                        results[location.name] = count
                     } catch (e: Exception) {
-                        logger.warn("Failed to collect ${location.name}: ${e.message}")
+                        logger.warn("Failed: ${location.name} - ${e.message}")
                         results[location.name] = 0
                     }
                 }
-            }.forEach { it.get() }
+            }
+            futures.forEach { it.get() }
         }
 
-        return BatchCollectionResponse(
-            results = results,
-            totalCount = results.values.sum(),
-            locations = results.size
-        )
+        val totalCount = results.values.sum()
+        return BatchCollectionResponse(results, totalCount, results.size)
     }
 
-    private fun saveCafes(places: List<Place>): Int {
-        val cafes = places.mapNotNull { it.toCafe() }
+    private fun saveNewCafes(places: List<Place>): Int {
+        val cafes = places.mapNotNull { convertToCafe(it) }
         if (cafes.isEmpty()) return 0
 
         val existingIds = cafeRepository.findExistingPlaceIds(cafes.map { it.placeId }).toSet()
-        val newCafes = cafes.filterNot { it.placeId in existingIds }
+        val newCafes = cafes.filter { it.placeId !in existingIds }
 
-        return if (newCafes.isNotEmpty()) {
-            cafeRepository.saveAll(newCafes).size
-        } else {
-            0
-        }
+        if (newCafes.isEmpty()) return 0
+        return cafeRepository.saveAll(newCafes).size
     }
 
-    private fun Place.isValid(): Boolean =
-        !displayName?.text.isNullOrBlank() &&
-                location?.latitude in -90.0..90.0 &&
-                location?.longitude in -180.0..180.0
+    private fun convertToCafe(place: Place): Cafe? {
+        val displayName = place.displayName?.text?.trim()
+        if (displayName.isNullOrEmpty()) return null
 
-    private fun Place.toCafe(): Cafe? = runCatching {
-        val name = displayName?.text?.trim() ?: return null
-        val lat = location?.latitude ?: return null
-        val lng = location?.longitude ?: return null
+        val location = place.location ?: return null
+        if (location.latitude !in -90.0..90.0 || location.longitude !in -180.0..180.0) return null
 
-        Cafe(
-            placeId = id,
-            name = name,
-            address = formattedAddress?.trim(),
-            latitude = BigDecimal.valueOf(lat),
-            longitude = BigDecimal.valueOf(lng),
-            location = geometryUtils.createPoint(lng, lat),
-            openTime = extractOpenTime(),
-            closeTime = extractCloseTime()
+        val address = place.formattedAddress?.trim()
+
+        return Cafe(
+            placeId = place.id,
+            name = displayName,
+            address = address,
+            latitude = BigDecimal.valueOf(location.latitude),
+            longitude = BigDecimal.valueOf(location.longitude),
+            location = geometryUtils.createPoint(location.longitude, location.latitude),
+            openTime = extractTime(place, true),
+            closeTime = extractTime(place, false) ?: LocalTime.of(22, 0)
         )
-    }.getOrNull()
-
-    private fun Place.extractOpenTime(): LocalTime? {
-        val day = LocalDate.now().dayOfWeek.value % 7
-        return regularOpeningHours?.periods
-            ?.find { it.open?.day == day }
-            ?.open?.let {
-                LocalTime.of(
-                    it.hour?.coerceIn(0, 23) ?: DEFAULT_OPEN_HOUR,
-                    it.minute?.coerceIn(0, 59) ?: 0
-                )
-            }
     }
 
-    private fun Place.extractCloseTime(): LocalTime {
-        val day = LocalDate.now().dayOfWeek.value % 7
-        val closeInfo = regularOpeningHours?.periods
-            ?.find { it.close?.day == day }
-            ?.close
+    private fun extractTime(place: Place, isOpen: Boolean): LocalTime? {
+        val periods = place.regularOpeningHours?.periods
+        if (periods == null) return null
 
-        return closeInfo?.let {
-            LocalTime.of(
-                it.hour?.coerceIn(0, 23) ?: DEFAULT_CLOSE_HOUR,
-                it.minute?.coerceIn(0, 59) ?: 0
-            )
-        } ?: LocalTime.of(DEFAULT_CLOSE_HOUR, 0)
+        val today = DayOfWeek.from(java.time.LocalDate.now()).value % 7
+        val info = periods.find { period ->
+            val target = if (isOpen) period.open else period.close
+            target != null && target.day == today
+        } ?: return null
+
+        val timeInfo = if (isOpen) info.open else info.close
+        if (timeInfo == null) return null
+
+        val hour = timeInfo.hour?.coerceIn(0, 23) ?: if (isOpen) 7 else 22
+        val minute = timeInfo.minute?.coerceIn(0, 59) ?: 0
+        return LocalTime.of(hour, minute)
     }
 }
