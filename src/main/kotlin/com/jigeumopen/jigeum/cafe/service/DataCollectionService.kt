@@ -10,13 +10,12 @@ import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import com.jigeumopen.jigeum.common.config.SeoulGridLocations
 import com.jigeumopen.jigeum.common.util.GeometryUtils
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 import java.time.LocalTime
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
 
 @Service
 class DataCollectionService(
@@ -26,87 +25,129 @@ class DataCollectionService(
     private val geometryUtils: GeometryUtils,
     private val gridLocations: SeoulGridLocations
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    @Transactional
-    fun collectCafesInArea(lat: Double, lng: Double, radius: Int): AreaCollectionResponse {
+    suspend fun collectCafesInArea(
+        lat: Double,
+        lng: Double,
+        radius: Int
+    ): AreaCollectionResponse = coroutineScope {
         val places = runCatching {
             googleClient.searchNearbyCafes(lat, lng, radius.toDouble()).places.orEmpty()
-        }.getOrElse { emptyList() }
-
-        val saved = saveCafes(places.filter { it.isSavable() })
-        log.info("Saved {} cafes at ({}, {})", saved, lat, lng)
-
-        return AreaCollectionResponse(saved, "$lat,$lng", radius)
-    }
-
-    fun collectAllCafes(): BatchCollectionResponse {
-        val results = ConcurrentHashMap<String, Int>()
-
-        Executors.newVirtualThreadPerTaskExecutor().use { executor ->
-            gridLocations.getAll().map { location ->
-                executor.submit {
-                    repeat(3) { attempt ->
-                        try {
-                            Thread.sleep(2000L * (attempt + 1))
-                            results[location.name] = collectCafesInArea(
-                                location.latitude,
-                                location.longitude,
-                                3000
-                            ).savedCount
-                            return@submit
-                        } catch (e: Exception) {
-                            if (attempt == 2) results[location.name] = 0
-                        }
-                    }
-                }
-            }.forEach { it.get() }
+        }.getOrElse {
+            logger.error("Failed to fetch cafes at ($lat, $lng)", it)
+            emptyList()
         }
 
-        return BatchCollectionResponse(results, results.values.sum(), results.size)
+        val saved = withContext(Dispatchers.IO) {
+            saveCafes(places.filter { it.isSavable() })
+        }
+
+        logger.info("Saved {} cafes at ({}, {})", saved, lat, lng)
+
+        AreaCollectionResponse(
+            savedCount = saved,
+            location = "$lat,$lng",
+            radius = radius
+        )
     }
 
+    suspend fun collectAllCafes(): BatchCollectionResponse = coroutineScope {
+        val results = gridLocations.getAll()
+            .map { location ->
+                async {
+                    location.name to collectWithRetry(
+                        lat = location.latitude,
+                        lng = location.longitude,
+                        radius = 3000
+                    )
+                }
+            }
+            .awaitAll()
+            .toMap()
+
+        BatchCollectionResponse(
+            results = results,
+            totalCount = results.values.sum(),
+            locations = results.size
+        )
+    }
+
+    private suspend fun collectWithRetry(
+        lat: Double,
+        lng: Double,
+        radius: Int,
+        maxRetries: Int = 3
+    ): Int = coroutineScope {
+        repeat(maxRetries) { attempt ->
+            try {
+                delay(2000L * (attempt + 1))
+                return@coroutineScope collectCafesInArea(lat, lng, radius).savedCount
+            } catch (e: Exception) {
+                if (attempt == maxRetries - 1) {
+                    logger.error("Failed to collect after $maxRetries attempts at ($lat, $lng)", e)
+                    return@coroutineScope 0
+                }
+            }
+        }
+        0
+    }
+
+    @Transactional
     private fun saveCafes(places: List<Place>): Int {
         if (places.isEmpty()) return 0
 
-        val existingIds = cafeRepository.findExistingPlaceIds(places.map { it.id })
-        val newPlaces = places.filter { it.id !in existingIds }
+        val placeIds = places.map { it.id }
+        val existingIds = cafeRepository.findExistingPlaceIds(placeIds)
+        val newPlaces = places.filterNot { it.id in existingIds }
 
         if (newPlaces.isEmpty()) return 0
 
         val cafes = newPlaces.mapNotNull { place ->
-            runCatching {
-                Cafe(
-                    placeId = place.id,
-                    name = place.displayName?.text?.trim() ?: "Unknown",
-                    address = place.formattedAddress?.trim(),
-                    latitude = BigDecimal.valueOf(place.location!!.latitude),
-                    longitude = BigDecimal.valueOf(place.location.longitude),
-                    location = geometryUtils.createPoint(place.location.longitude, place.location.latitude)
-                )
-            }.getOrNull()
+            place.toCafeEntity(geometryUtils)
         }
 
-        val saved = cafeRepository.saveAll(cafes)
-        val hours = saved.flatMap { cafe ->
+        val savedCafes = cafeRepository.saveAll(cafes)
+        val operatingHours = savedCafes.flatMap { cafe ->
             val place = newPlaces.first { it.id == cafe.placeId }
-            place.regularOpeningHours?.periods.orEmpty().mapNotNull { period ->
-                val open = period.open ?: return@mapNotNull null
-                val close = period.close ?: return@mapNotNull null
-
-                if (open.day == null || open.hour == null || open.minute == null ||
-                    close.hour == null || close.minute == null) return@mapNotNull null
-
-                CafeOperatingHour.of(
-                    cafeId = cafe.id!!,
-                    dayOfWeek = open.day,
-                    openTime = LocalTime.of(open.hour, open.minute),
-                    closeTime = LocalTime.of(close.hour, close.minute)
-                )
-            }
+            place.toOperatingHours(cafe.id!!)
         }
 
-        operatingHourRepository.saveAll(hours)
-        return saved.size
+        operatingHourRepository.saveAll(operatingHours)
+        return savedCafes.size
+    }
+}
+
+private fun Place.toCafeEntity(geometryUtils: GeometryUtils): Cafe? {
+    val location = location ?: return null
+    val name = displayName?.text?.trim() ?: return null
+
+    return runCatching {
+        Cafe(
+            placeId = id,
+            name = name,
+            address = formattedAddress?.trim(),
+            latitude = BigDecimal.valueOf(location.latitude),
+            longitude = BigDecimal.valueOf(location.longitude),
+            location = geometryUtils.createPoint(location.longitude, location.latitude)
+        )
+    }.getOrNull()
+}
+
+private fun Place.toOperatingHours(cafeId: Long): List<CafeOperatingHour> {
+    return regularOpeningHours?.periods.orEmpty().mapNotNull { period ->
+        val open = period.open ?: return@mapNotNull null
+        val close = period.close ?: return@mapNotNull null
+
+        if (open.day == null || open.hour == null || close.hour == null) {
+            return@mapNotNull null
+        }
+
+        CafeOperatingHour(
+            cafeId = cafeId,
+            dayOfWeek = open.day,
+            openTime = LocalTime.of(open.hour, open.minute ?: 0),
+            closeTime = LocalTime.of(close.hour, close.minute ?: 0)
+        )
     }
 }

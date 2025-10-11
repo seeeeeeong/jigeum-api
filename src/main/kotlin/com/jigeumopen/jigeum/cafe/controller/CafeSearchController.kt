@@ -4,6 +4,7 @@ import com.jigeumopen.jigeum.cafe.dto.request.SearchCafeRequest
 import com.jigeumopen.jigeum.cafe.dto.response.ApiResponse
 import com.jigeumopen.jigeum.cafe.service.CafeSearchService
 import jakarta.validation.Valid
+import kotlinx.coroutines.runBlocking
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,6 +13,9 @@ class CafeSearchController(
     private val searchService: CafeSearchService
 ) {
     @GetMapping("/search")
-    fun search(@Valid @ModelAttribute request: SearchCafeRequest) =
+    fun searchCafes(
+        @Valid @ModelAttribute request: SearchCafeRequest
+    ) = runBlocking {
         ApiResponse.success(searchService.searchNearby(request))
+    }
 }

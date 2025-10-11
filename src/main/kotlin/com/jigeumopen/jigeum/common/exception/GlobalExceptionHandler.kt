@@ -2,7 +2,6 @@ package com.jigeumopen.jigeum.common.exception
 
 import com.jigeumopen.jigeum.cafe.dto.response.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest
-import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,34 +12,47 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(BusinessException::class)
-    fun handleBusiness(e: BusinessException, req: HttpServletRequest) =
-        ResponseEntity.status(e.status)
-            .body(ErrorResponse.of(e, req.requestURI))
-            .also { log.error("[{}] {}", e.errorCode.code, e.message) }
+    fun handleBusiness(e: BusinessException, req: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        logger.error("[{}] {}", e.errorCode.code, e.message)
+        return ResponseEntity
+            .status(e.status)
+            .body(
+                ErrorResponse(
+                code = e.errorCode.code,
+                message = e.message ?: "Unknown error",
+                path = req.requestURI
+            )
+            )
+    }
 
-    @ExceptionHandler(MethodArgumentNotValidException::class, ConstraintViolationException::class)
-    fun handleValidation(e: Exception, req: HttpServletRequest): ResponseEntity<ErrorResponse> {
-        val errors = when (e) {
-            is MethodArgumentNotValidException -> e.bindingResult.fieldErrors.map {
-                ErrorResponse.FieldError(it.field, it.rejectedValue, it.defaultMessage)
-            }
-            is ConstraintViolationException -> e.constraintViolations.map {
-                ErrorResponse.FieldError(it.propertyPath.toString(), it.invalidValue, it.message)
-            }
-            else -> emptyList()
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidation(e: MethodArgumentNotValidException, req: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        val errors = e.bindingResult.fieldErrors.associate {
+            it.field to (it.defaultMessage ?: "Invalid value")
         }
 
-        return ResponseEntity.badRequest().body(
-            ErrorResponse.of(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다", req.requestURI, errors)
-        )
+        return ResponseEntity
+            .badRequest()
+            .body(ErrorResponse(
+                code = "VALIDATION_ERROR",
+                message = "입력값이 올바르지 않습니다",
+                path = req.requestURI,
+                errors = errors
+            ))
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleAll(e: Exception, req: HttpServletRequest) =
-        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류", req.requestURI))
-            .also { log.error("Unexpected error", e) }
+    fun handleAll(e: Exception, req: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        logger.error("Unexpected error", e)
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ErrorResponse(
+                code = "INTERNAL_ERROR",
+                message = "서버 오류가 발생했습니다",
+                path = req.requestURI
+            ))
+    }
 }

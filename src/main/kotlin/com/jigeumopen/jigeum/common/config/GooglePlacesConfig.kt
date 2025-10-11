@@ -1,15 +1,12 @@
 package com.jigeumopen.jigeum.common.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
 
-@Configuration
 @ConfigurationProperties(prefix = "google.places")
 data class GooglePlacesConfig(
-    var apiKey: String = "",
-    var baseUrl: String = "https://places.googleapis.com",
-    var detailFields: String = "name,formatted_address,formatted_phone_number,geometry,opening_hours,rating",
-    var language: String = "ko",
-    var timeoutSeconds: Long = 10,
-    var maxRetries: Long = 3
+    val apiKey: String = "",
+    val baseUrl: String = "https://places.googleapis.com",
+    val language: String = "ko",
+    val timeoutSeconds: Long = 10,
+    val maxRetries: Int = 3
 )

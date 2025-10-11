@@ -1,12 +1,18 @@
 package com.jigeumopen.jigeum.cafe.entity
 
+import com.jigeumopen.jigeum.common.entity.BaseEntity
 import jakarta.persistence.*
 import org.locationtech.jts.geom.Point
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 @Entity
-@Table(name = "cafes")
+@Table(
+    name = "cafes",
+    indexes = [
+        Index(name = "idx_cafe_place_id", columnList = "place_id"),
+        Index(name = "idx_cafe_location", columnList = "location")
+    ]
+)
 class Cafe(
     @Column(name = "place_id", nullable = false, unique = true, length = 100)
     val placeId: String,
@@ -24,22 +30,19 @@ class Cafe(
     val longitude: BigDecimal,
 
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
-    val location: Point
-) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    val location: Point,
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
-
-    @Column(name = "updated_at", nullable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.now()
-        protected set
+    @OneToMany(mappedBy = "cafe", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val operatingHours: MutableList<CafeOperatingHour> = mutableListOf()
+) : BaseEntity() {
 
     fun updateInfo(name: String, address: String?) {
         this.name = name
         this.address = address
-        this.updatedAt = LocalDateTime.now()
+    }
+
+    fun addOperatingHours(hours: List<CafeOperatingHour>) {
+        operatingHours.addAll(hours)
+        hours.forEach { it.cafe = this }
     }
 }

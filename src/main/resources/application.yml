@@ -4,55 +4,35 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/jigeum_db
-    username: ${DB_USERNAME:leesinseong}
-    password: ${DB_PASSWORD:}
-    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password:
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
-      connection-timeout: 30000
 
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: false
+    show-sql: ${SHOW_SQL:false}
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         default_batch_fetch_size: 50
 
-  mvc:
-    throw-exception-if-no-handler-found: true
-
-  web:
-    resources:
-      add-mappings: false
+  webflux:
+    base-path: /api
 
 server:
   port: 8080
-  error:
-    whitelabel:
-      enabled: false
-  tomcat:
-    threads:
-      max: 200
 
 google:
   places:
-    api-key: ${GOOGLE_API_KEY:AIzaSyDeBXJG6_YTuKnyHoRj6h0NgKWfLxyH5oE}
-    base-url: https://places.googleapis.com
+    api-key: ${GOOGLE_API_KEY}
     language: ko
     timeout-seconds: 10
-    max-retries: 3
 
 logging:
   level:
     root: INFO
-    com.jigeumopen.jigeum: DEBUG
-    org.hibernate.SQL: DEBUG
+    com.jigeumopen.jigeum: ${LOG_LEVEL:DEBUG}
   pattern:
-    console: "%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
-  file:
-    name: logs/jigeum-api.log
-    max-size: 10MB
-    max-history: 7
+    console: "%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
