@@ -73,7 +73,7 @@ class GooglePlacesClient(
             throw e
         } catch (e: Exception) {
             logger.error("Google API request failed", e)
-            throw BusinessException(ErrorCode.GOOGLE_API_ERROR, e)
+            throw BusinessException(ErrorCode.GOOGLE_API_ERROR)
         }
     }
 }
