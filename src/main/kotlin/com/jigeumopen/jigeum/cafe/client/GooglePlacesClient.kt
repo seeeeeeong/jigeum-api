@@ -64,7 +64,6 @@ class GooglePlacesClient(
             when (response.statusCode()) {
                 200 -> objectMapper.readValue<SearchNearbyResponse>(response.body())
                 429 -> throw BusinessException(ErrorCode.GOOGLE_API_RATE_LIMIT)
-                in 500..599 -> throw BusinessException(ErrorCode.GOOGLE_API_ERROR)
                 else -> {
                     logger.error("Google API error: ${response.statusCode()} - ${response.body()}")
                     throw BusinessException(ErrorCode.EXTERNAL_API_ERROR)

@@ -31,4 +31,7 @@ class SeoulGridLocations {
     )
 
     fun getAll(): List<GridLocation> = locations
+
+    fun findByName(name: String): GridLocation? =
+        locations.find { it.name == name }
 }

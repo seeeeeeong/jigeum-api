@@ -10,7 +10,7 @@ class CafeOperatingHour(
     val cafeId: Long,
 
     @Column(name = "day_of_week", nullable = false)
-    val dayOfWeek: Int,
+    val dayOfWeek: Int, // 0 = Sunday, 6 = Saturday
 
     @Column(name = "open_time", nullable = false)
     val openTime: LocalTime,

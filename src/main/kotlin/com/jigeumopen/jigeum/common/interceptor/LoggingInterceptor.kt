@@ -9,39 +9,22 @@ import org.springframework.web.servlet.HandlerInterceptor
 @Component
 class LoggingInterceptor : HandlerInterceptor {
 
-    private val logger = LoggerFactory.getLogger(javaClass)
+    private val log = LoggerFactory.getLogger(javaClass)
 
-    companion object {
-        private const val START_TIME = "startTime"
-    }
-
-    override fun preHandle(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        handler: Any
-    ): Boolean {
-        request.setAttribute(START_TIME, System.currentTimeMillis())
-        logger.info("==> ${request.method} ${request.requestURI}")
+    override fun preHandle(req: HttpServletRequest, res: HttpServletResponse, handler: Any): Boolean {
+        req.setAttribute("startTime", System.currentTimeMillis())
         return true
     }
 
-    override fun afterCompletion(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        handler: Any,
-        ex: Exception?
-    ) {
-        val startTime = request.getAttribute(START_TIME) as? Long ?: return
-        val elapsed = System.currentTimeMillis() - startTime
+    override fun afterCompletion(req: HttpServletRequest, res: HttpServletResponse, handler: Any, ex: Exception?) {
+        val start = req.getAttribute("startTime") as? Long ?: return
+        val elapsed = System.currentTimeMillis() - start
+        val msg = "${req.method} ${req.requestURI} - ${res.status} - ${elapsed}ms"
 
-        val logMsg = "<== ${request.method} ${request.requestURI} - ${response.status} - ${elapsed}ms"
-
-        if (ex != null) {
-            logger.error("$logMsg - Error: ${ex.message}")
-        } else if (elapsed > 3000) {
-            logger.warn("$logMsg [SLOW]")
-        } else {
-            logger.info(logMsg)
+        when {
+            ex != null -> log.error(msg, ex)
+            elapsed > 3000 -> log.warn("$msg [SLOW]")
+            else -> log.info(msg)
         }
     }
 }
