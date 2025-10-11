@@ -12,7 +12,6 @@ class SeoulGridLocations {
     )
 
     private val locations = listOf(
-        // Major districts
         GridLocation("강남", 37.4979, 127.0276),
         GridLocation("선릉", 37.5048, 127.0493),
         GridLocation("삼성", 37.5087, 127.0633),

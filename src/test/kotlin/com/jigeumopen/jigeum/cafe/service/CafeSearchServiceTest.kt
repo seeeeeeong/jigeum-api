@@ -1,7 +1,7 @@
 package com.jigeumopen.jigeum.cafe
 
 import com.jigeumopen.jigeum.cafe.dto.request.SearchCafeRequest
-import com.jigeumopen.jigeum.cafe.service.CafeSearchService
+import com.jigeumopen.jigeum.cafe.service.CafeService
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class CafeSearchIntegrationTest {
 
     @Autowired
-    lateinit var searchService: CafeSearchService
+    lateinit var searchService: CafeService
 
     @Test
     fun `should search nearby cafes`() = runBlocking {

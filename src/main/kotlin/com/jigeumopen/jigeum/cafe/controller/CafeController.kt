@@ -2,20 +2,16 @@ package com.jigeumopen.jigeum.cafe.controller
 
 import com.jigeumopen.jigeum.cafe.dto.request.SearchCafeRequest
 import com.jigeumopen.jigeum.cafe.dto.response.ApiResponse
-import com.jigeumopen.jigeum.cafe.service.CafeSearchService
+import com.jigeumopen.jigeum.cafe.service.CafeService
 import jakarta.validation.Valid
-import kotlinx.coroutines.runBlocking
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/cafes")
-class CafeSearchController(
-    private val searchService: CafeSearchService
+class CafeController(
+    private val searchService: CafeService
 ) {
     @GetMapping("/search")
-    fun searchCafes(
-        @Valid @ModelAttribute request: SearchCafeRequest
-    ) = runBlocking {
+    suspend fun searchCafes(@Valid @ModelAttribute request: SearchCafeRequest) =
         ApiResponse.success(searchService.searchNearby(request))
-    }
 }

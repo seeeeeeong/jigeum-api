@@ -6,7 +6,6 @@ import com.jigeumopen.jigeum.cafe.dto.response.PageResponse
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -14,7 +13,7 @@ import java.time.LocalTime
 
 @Service
 @Transactional(readOnly = true)
-class CafeSearchService(
+class CafeService(
     private val cafeRepository: CafeRepository
 ) {
     suspend fun searchNearby(request: SearchCafeRequest): PageResponse<CafeResponse> =
@@ -30,7 +29,6 @@ class CafeSearchService(
                 time = time
             )
 
-            // Pagination in memory (PostGIS query already sorted by distance)
             val paged = cafes
                 .drop(request.page * request.size)
                 .take(request.size)

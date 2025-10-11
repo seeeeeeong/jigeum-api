@@ -1,18 +1,15 @@
 package com.jigeumopen.jigeum.cafe.entity
 
+import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
 import com.jigeumopen.jigeum.common.entity.BaseEntity
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Table
 import org.locationtech.jts.geom.Point
 import java.math.BigDecimal
 
 @Entity
-@Table(
-    name = "cafes",
-    indexes = [
-        Index(name = "idx_cafe_place_id", columnList = "place_id"),
-        Index(name = "idx_cafe_location", columnList = "location")
-    ]
-)
+@Table(name = "cafes")
 class Cafe(
     @Column(name = "place_id", nullable = false, unique = true, length = 100)
     val placeId: String,
@@ -30,10 +27,7 @@ class Cafe(
     val longitude: BigDecimal,
 
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
-    val location: Point,
-
-    @OneToMany(mappedBy = "cafe", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val operatingHours: MutableList<CafeOperatingHour> = mutableListOf()
+    val location: Point
 ) : BaseEntity() {
 
     fun updateInfo(name: String, address: String?) {
@@ -41,8 +35,14 @@ class Cafe(
         this.address = address
     }
 
-    fun addOperatingHours(hours: List<CafeOperatingHour>) {
-        operatingHours.addAll(hours)
-        hours.forEach { it.cafe = this }
+    companion object {
+        fun create(rawData: GooglePlacesRawData, location: Point): Cafe = Cafe(
+            placeId = rawData.placeId,
+            name = rawData.displayName ?: "Unknown",
+            address = rawData.formattedAddress,
+            latitude = BigDecimal.valueOf(rawData.latitude),
+            longitude = BigDecimal.valueOf(rawData.longitude),
+            location = location
+        )
     }
 }

@@ -17,7 +17,7 @@ class GeometryUtils {
         FACTORY.createPoint(Coordinate(longitude, latitude))
 
     fun calculateDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
-        val earthRadius = 6371000.0 // meters
+        val earthRadius = 6371000.0
         val dLat = Math.toRadians(lat2 - lat1)
         val dLng = Math.toRadians(lng2 - lng1)
 
