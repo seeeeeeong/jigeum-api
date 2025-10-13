@@ -1,6 +1,6 @@
 package com.jigeumopen.jigeum.common.exception
 
-import com.jigeumopen.jigeum.cafe.dto.response.ErrorResponse
+import com.jigeumopen.jigeum.cafe.dto.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -36,12 +36,14 @@ class GlobalExceptionHandler {
 
         return ResponseEntity
             .badRequest()
-            .body(ErrorResponse(
+            .body(
+                ErrorResponse(
                 code = "VALIDATION_ERROR",
                 message = "입력값이 올바르지 않습니다",
                 path = req.requestURI,
                 errors = errors
-            ))
+            )
+            )
     }
 
     @ExceptionHandler(Exception::class)
@@ -49,10 +51,12 @@ class GlobalExceptionHandler {
         logger.error("Unexpected error", e)
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse(
+            .body(
+                ErrorResponse(
                 code = "INTERNAL_ERROR",
                 message = "서버 오류가 발생했습니다",
                 path = req.requestURI
-            ))
+            )
+            )
     }
 }

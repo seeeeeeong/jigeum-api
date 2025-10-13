@@ -1,8 +1,8 @@
 package com.jigeumopen.jigeum.cafe.service
 
-import com.jigeumopen.jigeum.cafe.dto.request.SearchCafeRequest
-import com.jigeumopen.jigeum.cafe.dto.response.CafeResponse
-import com.jigeumopen.jigeum.cafe.dto.response.PageResponse
+import com.jigeumopen.jigeum.cafe.dto.CafeResponse
+import com.jigeumopen.jigeum.cafe.dto.PageResponse
+import com.jigeumopen.jigeum.cafe.dto.SearchCafeRequest
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

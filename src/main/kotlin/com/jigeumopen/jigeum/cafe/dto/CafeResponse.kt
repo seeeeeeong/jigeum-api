@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.cafe.dto.response
+package com.jigeumopen.jigeum.cafe.dto
 
 import com.jigeumopen.jigeum.cafe.entity.Cafe
 import java.math.BigDecimal

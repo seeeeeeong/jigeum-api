@@ -7,8 +7,8 @@ import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType
 import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
 import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
 import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
-import com.jigeumopen.jigeum.cafe.client.GooglePlacesClient
 import com.jigeumopen.jigeum.common.config.SeoulGridLocations
+import com.jigeumopen.jigeum.infrastructure.client.GooglePlacesClient
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

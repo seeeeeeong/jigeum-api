@@ -7,7 +7,7 @@ import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
 import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
 import com.jigeumopen.jigeum.batch.service.DataProcessingService
 import com.jigeumopen.jigeum.batch.service.RawDataCollectionService
-import com.jigeumopen.jigeum.cafe.dto.response.ApiResponse
+import com.jigeumopen.jigeum.cafe.dto.ApiResponse
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 

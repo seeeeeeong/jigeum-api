@@ -1,8 +1,8 @@
 package com.jigeumopen.jigeum.batch.entity
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jigeumopen.jigeum.cafe.dto.Place
 import com.jigeumopen.jigeum.common.entity.BaseEntity
+import com.jigeumopen.jigeum.infrastructure.client.dto.Place
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes

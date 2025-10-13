@@ -15,27 +15,17 @@ class CafeOperatingHour(
     @Column(name = "day_of_week", nullable = false)
     val dayOfWeek: Int,
 
-    @Column(name = "open_close", nullable = false, columnDefinition = "tsrange")
-    val openClose: String
+    @Column(name = "open_time", nullable = false)
+    val openTime: LocalTime,
+
+    @Column(name = "close_time", nullable = false)
+    val closeTime: LocalTime
+
 ) : BaseEntity() {
 
     companion object {
-        fun fromPeriod(placeId: String, period: com.jigeumopen.jigeum.cafe.dto.Period): CafeOperatingHour? {
-            val open = period.open ?: return null
-            val close = period.close ?: return null
-
-            if (open.day == null || open.hour == null || close.hour == null) return null
-
-            val openTime = LocalTime.of(open.hour, open.minute ?: 0)
-            val closeTime = LocalTime.of(close.hour, close.minute ?: 0)
-
-            val tsRange = "[$openTime, $closeTime)"
-
-            return CafeOperatingHour(
-                placeId = placeId,
-                dayOfWeek = open.day,
-                openClose = tsRange
-            )
+        fun create(placeId: String, dayOfWeek: Int, openTime: LocalTime, closeTime: LocalTime): CafeOperatingHour {
+            return CafeOperatingHour(placeId, dayOfWeek, openTime, closeTime)
         }
     }
 }

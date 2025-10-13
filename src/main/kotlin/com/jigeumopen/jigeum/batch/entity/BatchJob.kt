@@ -1,6 +1,7 @@
 package com.jigeumopen.jigeum.batch.entity
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "batch_jobs")
@@ -13,6 +14,12 @@ class BatchJob(
 
     @Enumerated(EnumType.STRING)
     var status: JobStatus,
+
+    @Column(name = "started_at", nullable = false)
+    val startedAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "completed_at")
+    var completedAt: LocalDateTime? = null,
 
     var totalCount: Int = 0,
     var processedCount: Int = 0,
@@ -46,9 +53,11 @@ class BatchJob(
         updateProgress(total, success, error)
         this.status = JobStatus.from(success, error)
         this.totalCount = total
+        this.completedAt = LocalDateTime.now()
     }
 
     fun completeFailed() {
         this.status = JobStatus.FAILED
+        this.completedAt = LocalDateTime.now()
     }
 }

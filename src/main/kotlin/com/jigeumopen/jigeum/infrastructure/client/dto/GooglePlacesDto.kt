@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.cafe.dto
+package com.jigeumopen.jigeum.infrastructure.client.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -65,20 +65,20 @@ data class RegularOpeningHours(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Period(
     @JsonProperty("open")
-    val open: DayTime? = null,
+    val open: DayTime,
 
     @JsonProperty("close")
-    val close: DayTime? = null
+    val close: DayTime
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DayTime(
     @JsonProperty("day")
-    val day: Int? = null,
+    val day: Int,
 
     @JsonProperty("hour")
-    val hour: Int? = null,
+    val hour: Int,
 
     @JsonProperty("minute")
-    val minute: Int? = null
+    val minute: Int
 )

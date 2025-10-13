@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.batch.scheduler
+package com.jigeumopen.jigeum.infrastructure.scheduler
 
 import com.jigeumopen.jigeum.batch.entity.BatchJob
 import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType

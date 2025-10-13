@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.cafe.dto.request
+package com.jigeumopen.jigeum.cafe.dto
 
 import jakarta.validation.constraints.*
 import java.time.LocalTime

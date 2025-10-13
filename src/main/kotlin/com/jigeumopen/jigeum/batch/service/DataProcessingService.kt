@@ -6,17 +6,18 @@ import com.jigeumopen.jigeum.batch.entity.BatchJob
 import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
 import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
 import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
-import com.jigeumopen.jigeum.cafe.dto.RegularOpeningHours
 import com.jigeumopen.jigeum.cafe.entity.Cafe
 import com.jigeumopen.jigeum.cafe.entity.CafeOperatingHour
 import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import com.jigeumopen.jigeum.common.util.GeometryUtils
+import com.jigeumopen.jigeum.infrastructure.client.dto.RegularOpeningHours
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalTime
 import java.util.*
 
 @Service
@@ -105,24 +106,31 @@ class DataProcessingService(
             ?: Cafe.create(rawData, geometryUtils.createPoint(rawData.longitude, rawData.latitude))
                 .also { cafeRepository.save(it) }
 
-        rawData.openingHours?.let { processOperatingHours(cafe.placeId, it) }
+        rawData.openingHours?.let { processOperatingHours(cafe, it) }
         rawData.markAsProcessed()
         rawDataRepository.save(rawData)
     }
 
     @Transactional
-    fun processOperatingHours(placeId: String, openingHoursJson: String) {
+    fun processOperatingHours(cafe: Cafe, openingHoursJson: String) {
         try {
-            operatingHourRepository.deleteByPlaceId(placeId)
+            operatingHourRepository.deleteByPlaceId(cafe.placeId)
 
             val openingHours = objectMapper.readValue<RegularOpeningHours>(openingHoursJson)
             val operatingHours = openingHours.periods
-                ?.mapNotNull { period -> CafeOperatingHour.fromPeriod(placeId, period) }
+                ?.map { period ->
+                    CafeOperatingHour.create(
+                        cafe.placeId,
+                        period.open.day,
+                        LocalTime.of(period.open.hour, period.open.minute),
+                        LocalTime.of(period.close.hour, period.close.minute)
+                    )
+                }
                 .orEmpty()
 
             operatingHourRepository.saveAll(operatingHours)
         } catch (e: Exception) {
-            logger.error("Failed to process operating hours for cafe: {}", placeId, e)
+            logger.error("Failed to process operating hours for cafe: {}", cafe.placeId, e)
         }
     }
 }

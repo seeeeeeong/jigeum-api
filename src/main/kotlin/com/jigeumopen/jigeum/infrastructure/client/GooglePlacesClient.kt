@@ -1,9 +1,9 @@
-package com.jigeumopen.jigeum.cafe.client
+package com.jigeumopen.jigeum.infrastructure.client
 
-import com.jigeumopen.jigeum.cafe.dto.*
 import com.jigeumopen.jigeum.common.config.GooglePlacesConfig
 import com.jigeumopen.jigeum.common.exception.BusinessException
 import com.jigeumopen.jigeum.common.exception.ErrorCode
+import com.jigeumopen.jigeum.infrastructure.client.dto.*
 import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode

@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.cafe.dto.response
+package com.jigeumopen.jigeum.cafe.dto
 
 import java.time.LocalDateTime
 

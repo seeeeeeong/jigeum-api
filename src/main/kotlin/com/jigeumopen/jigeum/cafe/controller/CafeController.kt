@@ -1,7 +1,7 @@
 package com.jigeumopen.jigeum.cafe.controller
 
-import com.jigeumopen.jigeum.cafe.dto.request.SearchCafeRequest
-import com.jigeumopen.jigeum.cafe.dto.response.ApiResponse
+import com.jigeumopen.jigeum.cafe.dto.ApiResponse
+import com.jigeumopen.jigeum.cafe.dto.SearchCafeRequest
 import com.jigeumopen.jigeum.cafe.service.CafeService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*

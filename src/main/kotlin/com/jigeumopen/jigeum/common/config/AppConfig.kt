@@ -9,9 +9,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.reactive.CorsWebFilter
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
@@ -32,20 +29,4 @@ class AppConfig {
         configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
     }
 
-    @Bean
-    fun corsWebFilter(): CorsWebFilter {
-        val config = CorsConfiguration().apply {
-            allowedOriginPatterns = listOf("http://localhost:*")
-            allowedMethods = listOf("GET", "POST", "OPTIONS", "DELETE", "PUT")
-            allowedHeaders = listOf("*")
-            allowCredentials = true
-            maxAge = 3600
-        }
-
-        val source = UrlBasedCorsConfigurationSource().apply {
-            registerCorsConfiguration("/api/**", config)
-        }
-
-        return CorsWebFilter(source)
-    }
 }
