@@ -1,8 +1,6 @@
 package com.jigeumopen.jigeum.batch.dto
 
 import com.jigeumopen.jigeum.batch.entity.BatchJob
-import java.time.Duration
-import java.time.LocalDateTime
 
 data class BatchJobResponse(
     val batchId: String,
@@ -11,16 +9,10 @@ data class BatchJobResponse(
     val totalCount: Int,
     val processedCount: Int,
     val successCount: Int,
-    val errorCount: Int,
-    val startedAt: LocalDateTime,
-    val completedAt: LocalDateTime?,
-    val duration: String?,
-    val message: String?
+    val errorCount: Int
 ) {
     companion object {
         fun from(batchJob: BatchJob): BatchJobResponse {
-            val duration = formatDuration(batchJob.startedAt, batchJob.completedAt)
-
             return BatchJobResponse(
                 batchId = batchJob.batchId,
                 jobType = batchJob.jobType.name,
@@ -28,23 +20,8 @@ data class BatchJobResponse(
                 totalCount = batchJob.totalCount,
                 processedCount = batchJob.processedCount,
                 successCount = batchJob.successCount,
-                errorCount = batchJob.errorCount,
-                startedAt = batchJob.startedAt,
-                completedAt = batchJob.completedAt,
-                duration = duration,
-                message = batchJob.message
+                errorCount = batchJob.errorCount
             )
-        }
-
-        private fun formatDuration(startedAt: LocalDateTime, completedAt: LocalDateTime?): String? {
-            return completedAt?.let {
-                val duration = Duration.between(startedAt, it)
-                String.format("%02d:%02d:%02d",
-                    duration.toHours(),
-                    duration.toMinutesPart(),
-                    duration.toSecondsPart()
-                )
-            }
         }
     }
 }

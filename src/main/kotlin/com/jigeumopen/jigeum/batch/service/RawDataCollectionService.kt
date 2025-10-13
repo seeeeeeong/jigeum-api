@@ -17,9 +17,6 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Service
@@ -33,55 +30,43 @@ class RawDataCollectionService(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun collectRawData(): BatchJob = coroutineScope {
-        val batchId = generateBatchId()
-        val batchJob = createBatchJob(batchId)
-        val semaphore = Semaphore(3)
+        val batchId = UUID.randomUUID().toString().take(8)
+        val batchJob = batchJobRepository.save(BatchJob(batchId, JobType.COLLECT_RAW_DATA, JobStatus.RUNNING))
 
+        val semaphore = Semaphore(3)
         logger.info("Starting raw data collection batch: {}", batchId)
 
         try {
             val locations = gridLocations.getAll()
-            val totalLocations = locations.size
 
             val results = locations.map { location ->
                 async {
                     semaphore.withPermit {
                         delay(1000)
-                        runCatching { collectLocationData(location, batchId) }
-                            .onFailure { e -> logger.error("Failed to collect from ${location.name}", e) }
-                            .getOrDefault(0)
+                        runCatching {
+                            collectLocationData(location, batchId)
+                        }.onSuccess { count ->
+                            logger.info("Collected {} new cafes from {}", count, location.name)
+                        }.onFailure { e ->
+                            logger.warn("Failed to collect from ${location.name}: {}", e.message)
+                        }
                     }
                 }
             }.awaitAll()
 
-            val totalCafes = results.sum()
-            val successCount = results.count { it > 0 }
-            val errorCount = totalLocations - successCount
+            val successValues = results.mapNotNull { it.getOrNull() }
+            val totalCafes = successValues.sum()
+            val successCount = successValues.count()
+            val errorCount = results.count { it.isFailure }
 
-            val status = when {
-                errorCount == 0 -> JobStatus.COMPLETED
-                successCount == 0 -> JobStatus.FAILED
-                else -> JobStatus.PARTIAL_SUCCESS
-            }
-
-            batchJob.updateProgress(
-                processed = totalLocations,
-                success = successCount,
-                error = errorCount
-            )
-            batchJob.totalCount = totalCafes
-            batchJob.complete(
-                status = status,
-                message = "Collected $totalCafes cafes from $successCount/$totalLocations locations"
-            )
-
+            batchJob.completeWithResult(totalCafes, successCount, errorCount)
             batchJobRepository.save(batchJob)
-            logger.info("Raw data collection completed: {}, Total: {}", batchId, totalCafes)
 
+            logger.info("Raw data collection completed: {}, Total new cafes: {}", batchId, totalCafes)
             batchJob
         } catch (e: Exception) {
             logger.error("Batch failed: {}", batchId, e)
-            batchJob.complete(JobStatus.FAILED, e.message)
+            batchJob.completeFailed()
             batchJobRepository.save(batchJob)
             throw e
         }
@@ -91,43 +76,17 @@ class RawDataCollectionService(
         location: SeoulGridLocations.GridLocation,
         batchId: String
     ): Int {
-        val response = googleClient.searchNearbyCafes(
-            latitude = location.latitude,
-            longitude = location.longitude,
-            radius = 3000.0
+        val response = googleClient.searchNearbyCafes(location.latitude, location.longitude, 3000.0)
+        val places = response.places.orEmpty()
+
+        val existingIds = rawDataRepository.findExistingPlaceIds(places.map { it.id })
+        val newPlaces = places.filterNot { it.id in existingIds }
+
+        rawDataRepository.saveAll(
+            newPlaces.map { GooglePlacesRawData.fromPlace(it, batchId, objectMapper) }
         )
 
-        val places = response.places.orEmpty()
-        if (places.isEmpty()) return 0
-
-        val placeIds = places.map { it.id }
-        val existingIds = rawDataRepository.findExistingPlaceIds(placeIds)
-
-        val newPlaces = places.filterNot { it.id in existingIds }
-        if (newPlaces.isEmpty()) return 0
-
-        val rawDataEntities = newPlaces.map { place ->
-            GooglePlacesRawData.fromPlace(place, batchId, objectMapper)
-        }
-
-        rawDataRepository.saveAll(rawDataEntities)
         return newPlaces.size
     }
 
-    @Transactional
-    fun createBatchJob(batchId: String): BatchJob {
-        return batchJobRepository.save(
-            BatchJob(
-                batchId = batchId,
-                jobType = JobType.COLLECT_RAW_DATA,
-                status = JobStatus.RUNNING
-            )
-        )
-    }
-
-    private fun generateBatchId(): String {
-        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
-        val uuid = UUID.randomUUID().toString().take(8)
-        return "RAW_${timestamp}_$uuid"
-    }
 }

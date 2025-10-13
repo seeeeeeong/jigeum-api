@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 interface CafeOperatingHourRepository : JpaRepository<CafeOperatingHour, Long> {
 
     @Modifying
-    @Query("DELETE FROM CafeOperatingHour oh WHERE oh.cafeId = :cafeId")
-    fun deleteByCafeId(@Param("cafeId") cafeId: Long)
+    @Query("DELETE FROM CafeOperatingHour oh WHERE oh.placeId = :placeId")
+    fun deleteByPlaceId(@Param("placeId") placeId: String)
 
 }

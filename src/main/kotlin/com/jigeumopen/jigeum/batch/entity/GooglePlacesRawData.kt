@@ -32,23 +32,13 @@ class GooglePlacesRawData(
     @Column(name = "opening_hours", columnDefinition = "jsonb")
     val openingHours: String?,
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "raw_data", nullable = false, columnDefinition = "jsonb")
-    val rawData: String,
-
     @Column(nullable = false)
     var processed: Boolean = false,
 
-    @Column(name = "error_message", length = 500)
-    var errorMessage: String? = null
 ) : BaseEntity() {
 
     fun markAsProcessed() {
         this.processed = true
-    }
-
-    fun markAsError(message: String) {
-        this.errorMessage = message
     }
 
     companion object {
@@ -61,7 +51,6 @@ class GooglePlacesRawData(
                 latitude = place.location?.latitude ?: 0.0,
                 longitude = place.location?.longitude ?: 0.0,
                 openingHours = place.regularOpeningHours?.let { objectMapper.writeValueAsString(it) },
-                rawData = objectMapper.writeValueAsString(place),
                 processed = false
             )
         }

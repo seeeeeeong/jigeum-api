@@ -29,16 +29,10 @@ class Cafe(
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
     val location: Point
 ) : BaseEntity() {
-
-    fun updateInfo(name: String, address: String?) {
-        this.name = name
-        this.address = address
-    }
-
     companion object {
         fun create(rawData: GooglePlacesRawData, location: Point): Cafe = Cafe(
             placeId = rawData.placeId,
-            name = rawData.displayName ?: "Unknown",
+            name = rawData.displayName!!,
             address = rawData.formattedAddress,
             latitude = BigDecimal.valueOf(rawData.latitude),
             longitude = BigDecimal.valueOf(rawData.longitude),

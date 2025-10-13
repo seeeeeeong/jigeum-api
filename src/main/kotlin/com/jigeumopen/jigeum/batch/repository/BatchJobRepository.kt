@@ -1,7 +1,6 @@
 package com.jigeumopen.jigeum.batch.repository
 
 import com.jigeumopen.jigeum.batch.entity.BatchJob
-import com.jigeumopen.jigeum.batch.entity.BatchJob.JobStatus
 import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -15,15 +14,12 @@ interface BatchJobRepository : JpaRepository<BatchJob, Long> {
     fun findByBatchId(batchId: String): BatchJob?
 
     @Query("""
-        SELECT b FROM BatchJob b 
-        WHERE b.jobType IN :jobTypes
-        AND b.status = :status
-        ORDER BY b.startedAt DESC
+    SELECT b FROM BatchJob b 
+    WHERE b.status = 'RUNNING'
+    ORDER BY b.startedAt DESC
     """)
-    fun findByJobTypesAndStatus(
-        @Param("jobTypes") jobTypes: List<JobType>,
-        @Param("status") status: JobStatus
-    ): List<BatchJob>
+    fun findRunningJobs(): List<BatchJob>
+
 
     fun findTop10ByOrderByStartedAtDesc(): List<BatchJob>
 

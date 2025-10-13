@@ -8,7 +8,6 @@ plugins {
 
 group = "com.jigeumopen"
 version = "0.0.1-SNAPSHOT"
-description = "Demo project for Spring Boot"
 
 java {
 	toolchain {
@@ -21,23 +20,45 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-webflux") // WebClient
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-configuration-processor")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+
+	// Kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// Coroutines
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
+	// PostGIS & Spatial
 	implementation("net.postgis:postgis-jdbc:2.5.1")
 	implementation("org.locationtech.jts:jts-core:1.19.0")
 	implementation("org.hibernate:hibernate-spatial:6.6.29.Final")
 
-	implementation("org.springframework.boot:spring-boot-configuration-processor")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
+	// JSON Support
+	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.7.0")
+	implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
 
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// Database
 	runtimeOnly("org.postgresql:postgresql")
 
+	// Development
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	// Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+	testImplementation("io.mockk:mockk:1.13.8")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -55,12 +76,4 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-tasks.withType<JavaExec> {
-	jvmArgs = listOf("-Djdk.virtualThreadScheduler.parallelism=100")
-}
-
-tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
-	jvmArgs = listOf("-Djdk.virtualThreadScheduler.parallelism=100")
 }

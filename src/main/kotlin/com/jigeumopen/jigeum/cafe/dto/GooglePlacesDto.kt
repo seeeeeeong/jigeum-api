@@ -48,13 +48,7 @@ data class Place(
 
     @JsonProperty("regularOpeningHours")
     val regularOpeningHours: RegularOpeningHours? = null
-) {
-    fun isSavable(): Boolean {
-        return displayName != null
-                && !displayName.text.isNullOrBlank()
-                && location != null
-    }
-}
+)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class LocalizedText(

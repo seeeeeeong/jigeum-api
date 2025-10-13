@@ -3,7 +3,6 @@ package com.jigeumopen.jigeum.batch.controller
 import com.jigeumopen.jigeum.batch.dto.BatchJobResponse
 import com.jigeumopen.jigeum.batch.dto.BatchStatusResponse
 import com.jigeumopen.jigeum.batch.dto.BatchStatusResponseDto
-import com.jigeumopen.jigeum.batch.entity.BatchJob
 import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
 import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
 import com.jigeumopen.jigeum.batch.service.DataProcessingService
@@ -41,17 +40,10 @@ class BatchController(
         val unprocessedCount = rawDataRepository.countByProcessed(false)
 
         val recentJobs = batchJobRepository.findTop10ByOrderByStartedAtDesc()
-        val runningJobs = batchJobRepository.findByJobTypesAndStatus(
-            listOf(BatchJob.JobType.COLLECT_RAW_DATA, BatchJob.JobType.PROCESS_RAW_DATA),
-            BatchJob.JobStatus.RUNNING
-        )
+        val runningJobs = batchJobRepository.findRunningJobs()
 
-        val statusResponse = BatchStatusResponse(
-            totalRawData = totalRawData,
-            unprocessedData = unprocessedCount,
-            runningJobs = runningJobs,
-            recentJobs = recentJobs
-        ).toResponse()
+        val statusResponse = BatchStatusResponse(totalRawData, unprocessedCount, runningJobs, recentJobs)
+            .toResponse()
 
         return ApiResponse.success(statusResponse)
     }
@@ -67,12 +59,7 @@ class BatchController(
         val timeout = LocalDateTime.now().minusHours(6)
         val stuckJobs = batchJobRepository.findStuckJobs(timeout)
 
-        stuckJobs.forEach { job ->
-            job.complete(
-                status = BatchJob.JobStatus.FAILED,
-                message = "Job timeout - marked as failed by cleanup"
-            )
-        }
+        stuckJobs.forEach { it.completeFailed() }
 
         batchJobRepository.saveAll(stuckJobs)
 
