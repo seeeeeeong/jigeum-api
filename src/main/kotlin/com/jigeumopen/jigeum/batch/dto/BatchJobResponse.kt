@@ -1,3 +1,4 @@
+// BatchJobResponse.kt
 package com.jigeumopen.jigeum.batch.dto
 
 import com.jigeumopen.jigeum.batch.entity.BatchJob
@@ -26,29 +27,25 @@ data class BatchJobResponse(
     }
 }
 
-data class BatchStatusResponseDto(
-    val totalRawData: Long,
-    val unprocessedData: Long,
-    val processedData: Long,
-    val runningJobs: List<BatchJobResponse>,
-    val recentJobs: List<BatchJobResponse>
-)
-
 data class BatchStatusResponse(
     val totalRawData: Long,
+    val processedCount: Long,
     val unprocessedData: Long,
-    val runningJobs: List<BatchJob>,
-    val recentJobs: List<BatchJob>
+    val runningJobs: List<BatchJobResponse>,
 ) {
-    private val processedData: Long get() = totalRawData - unprocessedData
-
-    fun toResponse(): BatchStatusResponseDto {
-        return BatchStatusResponseDto(
-            totalRawData = totalRawData,
-            unprocessedData = unprocessedData,
-            processedData = processedData,
-            runningJobs = runningJobs.map { BatchJobResponse.from(it) },
-            recentJobs = recentJobs.map { BatchJobResponse.from(it) }
-        )
+    companion object {
+        fun of(
+            totalRawData: Long,
+            processedCount: Long,
+            runningJobs: List<BatchJob>,
+        ): BatchStatusResponse {
+            val unprocessedData = (totalRawData - processedCount).coerceAtLeast(0)
+            return BatchStatusResponse(
+                totalRawData = totalRawData,
+                processedCount = processedCount,
+                unprocessedData = unprocessedData,
+                runningJobs = runningJobs.map { BatchJobResponse.from(it) }
+            )
+        }
     }
 }

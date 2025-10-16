@@ -2,6 +2,7 @@ package com.jigeumopen.jigeum.batch.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.jigeumopen.jigeum.batch.dto.BatchJobResponse
 import com.jigeumopen.jigeum.batch.entity.BatchJob
 import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
 import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
@@ -35,7 +36,7 @@ class DataProcessingService(
         private const val BATCH_SIZE = 100
     }
 
-    suspend fun processRawData(reprocessAll: Boolean = false): BatchJob = coroutineScope {
+    suspend fun processRawData(reprocessAll: Boolean = false): BatchJobResponse = coroutineScope {
         val batchId = UUID.randomUUID().toString().take(8)
         val batchJob = batchJobRepository.save(
             BatchJob(batchId, BatchJob.JobType.PROCESS_RAW_DATA, BatchJob.JobStatus.RUNNING)
@@ -90,14 +91,14 @@ class DataProcessingService(
             batchJob.completeWithResult(processedCount, successCount, errorCount)
             batchJobRepository.save(batchJob)
             logger.info("Data processing completed: {}, Success: {}/{}", batchId, successCount, processedCount)
+
+            BatchJobResponse.from(batchJob)
         } catch (e: Exception) {
             logger.error("Batch processing failed: {}", batchId, e)
             batchJob.completeFailed()
             batchJobRepository.save(batchJob)
             throw e
         }
-
-        batchJob
     }
 
     @Transactional

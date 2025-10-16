@@ -1,6 +1,7 @@
 package com.jigeumopen.jigeum.batch.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.jigeumopen.jigeum.batch.dto.BatchJobResponse
 import com.jigeumopen.jigeum.batch.entity.BatchJob
 import com.jigeumopen.jigeum.batch.entity.BatchJob.JobStatus
 import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType
@@ -29,7 +30,7 @@ class RawDataCollectionService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun collectRawData(): BatchJob = coroutineScope {
+    suspend fun collectRawData(): BatchJobResponse = coroutineScope {
         val batchId = UUID.randomUUID().toString().take(8)
         val batchJob = batchJobRepository.save(BatchJob(batchId, JobType.COLLECT_RAW_DATA, JobStatus.RUNNING))
 
@@ -63,7 +64,7 @@ class RawDataCollectionService(
             batchJobRepository.save(batchJob)
 
             logger.info("Raw data collection completed: {}, Total new cafes: {}", batchId, totalCafes)
-            batchJob
+            BatchJobResponse.from(batchJob)
         } catch (e: Exception) {
             logger.error("Batch failed: {}", batchId, e)
             batchJob.completeFailed()

@@ -13,7 +13,7 @@ class BatchJob(
     val jobType: JobType,
 
     @Enumerated(EnumType.STRING)
-    var status: JobStatus,
+    var status: JobStatus = JobStatus.RUNNING,
 
     @Column(name = "started_at", nullable = false)
     val startedAt: LocalDateTime = LocalDateTime.now(),
@@ -22,42 +22,8 @@ class BatchJob(
     var completedAt: LocalDateTime? = null,
 
     var totalCount: Int = 0,
-    var processedCount: Int = 0,
     var successCount: Int = 0,
     var errorCount: Int = 0
 ) {
 
-    enum class JobType {
-        COLLECT_RAW_DATA, PROCESS_RAW_DATA
-    }
-
-    enum class JobStatus {
-        RUNNING, COMPLETED, FAILED, PARTIAL_SUCCESS;
-
-        companion object {
-            fun from(success: Int, error: Int): JobStatus = when {
-                error == 0 -> COMPLETED
-                success == 0 -> FAILED
-                else -> PARTIAL_SUCCESS
-            }
-        }
-    }
-
-    fun updateProgress(total: Int, success: Int, error: Int) {
-        this.processedCount = total
-        this.successCount = success
-        this.errorCount = error
-    }
-
-    fun completeWithResult(total: Int, success: Int, error: Int) {
-        updateProgress(total, success, error)
-        this.status = JobStatus.from(success, error)
-        this.totalCount = total
-        this.completedAt = LocalDateTime.now()
-    }
-
-    fun completeFailed() {
-        this.status = JobStatus.FAILED
-        this.completedAt = LocalDateTime.now()
-    }
 }
