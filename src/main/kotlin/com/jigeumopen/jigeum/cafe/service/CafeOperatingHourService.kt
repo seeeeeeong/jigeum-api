@@ -25,13 +25,15 @@ class CafeOperatingHourService(
 
             val openingHours = objectMapper.readValue<RegularOpeningHours>(openingHoursJson)
             val operatingHours = openingHours.periods
-                ?.map { period ->
-                    CafeOperatingHour.of(
-                        placeId = cafe.placeId,
-                        dayOfWeek = period.open.day,
-                        openTime = LocalTime.of(period.open.hour, period.open.minute),
-                        closeTime = LocalTime.of(period.close.hour, period.close.minute)
-                    )
+                ?.mapNotNull { period ->
+                    period.close?.let {  // 👈 close가 있을 때만 처리
+                        CafeOperatingHour.of(
+                            placeId = cafe.placeId,
+                            dayOfWeek = period.open.day,
+                            openTime = LocalTime.of(period.open.hour, period.open.minute),
+                            closeTime = LocalTime.of(it.hour, it.minute)
+                        )
+                    }
                 }
                 .orEmpty()
 

@@ -68,7 +68,7 @@ data class Period(
     val open: DayTime,
 
     @JsonProperty("close")
-    val close: DayTime
+    val close: DayTime?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

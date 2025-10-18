@@ -48,6 +48,7 @@ class CafeService(
             )
         }
 
+    @Transactional
     fun processRawDataToCafe(cafeRawData: CafeRawData) {
         val cafe = cafeRepository.findByPlaceId(cafeRawData.placeId) ?: run {
             val locationPoint = geometryUtils.createPoint(cafeRawData.longitude, cafeRawData.latitude)
