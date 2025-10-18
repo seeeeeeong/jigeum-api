@@ -22,8 +22,19 @@ class BatchJob(
     var completedAt: LocalDateTime? = null,
 
     var totalCount: Int = 0,
+    var processedCount: Int = 0,
     var successCount: Int = 0,
     var errorCount: Int = 0
 ) {
+    fun updateStatus(newStatus: JobStatus, total: Int? = null) {
+        this.status = newStatus
+        this.completedAt = LocalDateTime.now()
+        total?.let { this.totalCount = it }
+    }
 
+    fun updateCount(processed: Int, success: Int, error: Int) {
+        this.processedCount = processed
+        this.successCount = success
+        this.errorCount = error
+    }
 }

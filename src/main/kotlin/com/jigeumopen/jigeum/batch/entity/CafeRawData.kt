@@ -8,8 +8,8 @@ import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
 @Entity
-@Table(name = "google_places_raw_data")
-class GooglePlacesRawData(
+@Table(name = "cafe_raw_data")
+class CafeRawData(
     @Column(name = "place_id", nullable = false, length = 100)
     val placeId: String,
 
@@ -35,24 +35,30 @@ class GooglePlacesRawData(
     @Column(nullable = false)
     var processed: Boolean = false,
 
-) : BaseEntity() {
-
-    fun markAsProcessed() {
-        this.processed = true
-    }
+    ) : BaseEntity() {
 
     companion object {
-        fun fromPlace(place: Place, batchId: String, objectMapper: ObjectMapper): GooglePlacesRawData {
-            return GooglePlacesRawData(
+        fun of(
+            place: Place,
+            batchId: String,
+            objectMapper: ObjectMapper
+        ): CafeRawData {
+            return CafeRawData(
                 placeId = place.id,
                 batchId = batchId,
                 displayName = place.displayName?.text,
                 formattedAddress = place.formattedAddress,
                 latitude = place.location?.latitude ?: 0.0,
                 longitude = place.location?.longitude ?: 0.0,
-                openingHours = place.regularOpeningHours?.let { objectMapper.writeValueAsString(it) },
+                openingHours = place.regularOpeningHours?.let {
+                    objectMapper.writeValueAsString(it)
+                },
                 processed = false
             )
         }
+    }
+
+    fun updateProcessed() {
+        this.processed = true
     }
 }

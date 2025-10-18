@@ -1,9 +1,12 @@
 package com.jigeumopen.jigeum.cafe.service
 
+import com.jigeumopen.jigeum.batch.entity.CafeRawData
+import com.jigeumopen.jigeum.cafe.dto.CafeRequest
 import com.jigeumopen.jigeum.cafe.dto.CafeResponse
-import com.jigeumopen.jigeum.cafe.dto.PageResponse
-import com.jigeumopen.jigeum.cafe.dto.SearchCafeRequest
+import com.jigeumopen.jigeum.cafe.entity.Cafe
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
+import com.jigeumopen.jigeum.common.dto.PageResponse
+import com.jigeumopen.jigeum.common.util.GeometryUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
@@ -14,9 +17,11 @@ import java.time.LocalTime
 @Service
 @Transactional(readOnly = true)
 class CafeService(
-    private val cafeRepository: CafeRepository
+    private val geometryUtils: GeometryUtils,
+    private val cafeRepository: CafeRepository,
+    private val cafeOperatingHourService: CafeOperatingHourService
 ) {
-    suspend fun searchNearby(request: SearchCafeRequest): PageResponse<CafeResponse> =
+    suspend fun searchNearby(request: CafeRequest): PageResponse<CafeResponse> =
         withContext(Dispatchers.IO) {
             val time = LocalTime.parse(request.time)
             val dayOfWeek = LocalDate.now().dayOfWeek.value % 7
@@ -42,4 +47,17 @@ class CafeService(
                 totalPages = (cafes.size + request.size - 1) / request.size
             )
         }
+
+    fun processRawDataToCafe(cafeRawData: CafeRawData) {
+        val cafe = cafeRepository.findByPlaceId(cafeRawData.placeId) ?: run {
+            val locationPoint = geometryUtils.createPoint(cafeRawData.longitude, cafeRawData.latitude)
+            cafeRepository.save(Cafe.create(cafeRawData, locationPoint))
+        }
+
+        cafeRawData.openingHours?.let {
+            cafeOperatingHourService.processOperatingHour(cafe, it)
+        }
+
+
+    }
 }

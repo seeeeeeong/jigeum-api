@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.common.config
+package com.jigeumopen.jigeum.batch.constant
 
 import org.springframework.stereotype.Component
 
@@ -93,16 +93,4 @@ class SeoulGridLocations {
     )
 
     fun getAll(): List<GridLocation> = locations
-
-    fun getByRegion(regionName: String): List<GridLocation> {
-        return when(regionName.lowercase()) {
-            "gangnam" -> locations.take(10)
-            "songpa" -> locations.slice(10..17)
-            "mapo" -> locations.slice(18..25)
-            "jongno" -> locations.slice(26..33)
-            else -> locations
-        }
-    }
-
-    fun getTotalCount(): Int = locations.size
 }

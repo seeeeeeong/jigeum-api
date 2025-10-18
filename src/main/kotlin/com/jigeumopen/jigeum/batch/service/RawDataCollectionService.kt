@@ -1,15 +1,16 @@
 package com.jigeumopen.jigeum.batch.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jigeumopen.jigeum.batch.dto.BatchJobResponse
+import com.jigeumopen.jigeum.batch.constant.SeoulGridLocations
+import com.jigeumopen.jigeum.batch.dto.OperationCountResponse
+import com.jigeumopen.jigeum.batch.dto.OperationResponse
 import com.jigeumopen.jigeum.batch.entity.BatchJob
-import com.jigeumopen.jigeum.batch.entity.BatchJob.JobStatus
-import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType
-import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
-import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
-import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
-import com.jigeumopen.jigeum.common.config.SeoulGridLocations
+import com.jigeumopen.jigeum.batch.entity.CafeRawData
+import com.jigeumopen.jigeum.batch.entity.JobStatus
+import com.jigeumopen.jigeum.batch.entity.JobType
+import com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository
 import com.jigeumopen.jigeum.infrastructure.client.GooglePlacesClient
+import com.jigeumopen.jigeum.infrastructure.client.dto.Place
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -18,76 +19,114 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class RawDataCollectionService(
-    private val googleClient: GooglePlacesClient,
-    private val rawDataRepository: GooglePlacesRawDataRepository,
-    private val batchJobRepository: BatchJobRepository,
-    private val gridLocations: SeoulGridLocations,
-    private val objectMapper: ObjectMapper
+    private val googlePlacesClient: GooglePlacesClient,
+    private val seoulGridLocations: SeoulGridLocations,
+    private val objectMapper: ObjectMapper,
+    private val cafeRawDataRepository: CafeRawDataRepository,
+    private val batchJobService: BatchJobService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun collectRawData(): BatchJobResponse = coroutineScope {
-        val batchId = UUID.randomUUID().toString().take(8)
-        val batchJob = batchJobRepository.save(BatchJob(batchId, JobType.COLLECT_RAW_DATA, JobStatus.RUNNING))
+    companion object {
+        private const val CONCURRENT_REQUESTS_LIMIT = 3
+        private const val REQUEST_DELAY_MS = 1000L
+        private const val SEARCH_RADIUS_METERS = 3000.0
+    }
 
-        val semaphore = Semaphore(3)
-        logger.info("Starting raw data collection batch: {}", batchId)
+    suspend fun collectRawData(): OperationResponse = coroutineScope {
+        val batchJob = createBatchJob()
+
+        logger.info("Raw data collection started - ID: {}", batchJob.batchId)
 
         try {
-            val locations = gridLocations.getAll()
+            val collectionResult = collectFromAllLocations(batchJob.batchId)
+            updateBatchCount(batchJob, collectionResult)
 
-            val results = locations.map { location ->
-                async {
-                    semaphore.withPermit {
-                        delay(1000)
-                        runCatching {
-                            collectLocationData(location, batchId)
-                        }.onSuccess { count ->
-                            logger.info("Collected {} new cafes from {}", count, location.name)
-                        }.onFailure { e ->
-                            logger.warn("Failed to collect from ${location.name}: {}", e.message)
-                        }
-                    }
-                }
-            }.awaitAll()
+            logger.info(
+                "Raw data collection completed - ID: {}, New places: {}, Success: {}, Failures: {}",
+                batchJob.batchId, collectionResult.processedCount, collectionResult.successCount, collectionResult.errorCount
+            )
 
-            val successValues = results.mapNotNull { it.getOrNull() }
-            val totalCafes = successValues.sum()
-            val successCount = successValues.count()
-            val errorCount = results.count { it.isFailure }
-
-            batchJob.completeWithResult(totalCafes, successCount, errorCount)
-            batchJobRepository.save(batchJob)
-
-            logger.info("Raw data collection completed: {}, Total new cafes: {}", batchId, totalCafes)
-            BatchJobResponse.from(batchJob)
+            OperationResponse.from(batchJob)
         } catch (e: Exception) {
-            logger.error("Batch failed: {}", batchId, e)
-            batchJob.completeFailed()
-            batchJobRepository.save(batchJob)
+            handleException(batchJob, e)
             throw e
         }
     }
 
-    private suspend fun collectLocationData(
-        location: SeoulGridLocations.GridLocation,
+    private suspend fun collectFromAllLocations(batchId: String): OperationCountResponse = coroutineScope {
+        val requestSemaphore = Semaphore(CONCURRENT_REQUESTS_LIMIT)
+        val gridLocations = seoulGridLocations.getAll()
+
+        val locationResults = gridLocations.map { gridLocation ->
+            async {
+                requestSemaphore.withPermit {
+                    delay(REQUEST_DELAY_MS)
+                    collectFromLocation(gridLocation, batchId)
+                }
+            }
+        }.awaitAll()
+
+        val successfulResults = locationResults.mapNotNull { it.getOrNull() }
+        val totalNewPlaces = successfulResults.sum()
+        val successfulLocations = successfulResults.size
+        val failedLocations = locationResults.count { it.isFailure }
+
+        OperationCountResponse(totalNewPlaces, successfulLocations, failedLocations)
+    }
+
+    private suspend fun collectFromLocation(
+        gridLocation: SeoulGridLocations.GridLocation,
         batchId: String
-    ): Int {
-        val response = googleClient.searchNearbyCafes(location.latitude, location.longitude, 3000.0)
-        val places = response.places.orEmpty()
+    ): Result<Int> = runCatching {
+        val searchResponse = googlePlacesClient.searchNearbyCafes(gridLocation.latitude, gridLocation.longitude, SEARCH_RADIUS_METERS)
 
-        val existingIds = rawDataRepository.findExistingPlaceIds(places.map { it.id })
-        val newPlaces = places.filterNot { it.id in existingIds }
+        val foundPlaces = searchResponse.places.orEmpty()
+        val newPlacesCount = saveNewPlaces(foundPlaces, batchId)
 
-        rawDataRepository.saveAll(
-            newPlaces.map { GooglePlacesRawData.fromPlace(it, batchId, objectMapper) }
+        logger.info(
+            "Location processed - {}: Found {} places, {} new",
+            gridLocation.name, foundPlaces.size, newPlacesCount
         )
+        newPlacesCount
+    }.onFailure { exception ->
+        logger.warn("Failed to collect from location: {} - {}", gridLocation.name, exception.message)
+    }
 
+    private fun saveNewPlaces(places: List<Place>, batchId: String): Int {
+        val placeIds = places.map { it.id }
+        val existingPlaceIds = cafeRawDataRepository.findExistingPlaceIds(placeIds)
+        val newPlaces = places.filterNot { it.id in existingPlaceIds }
+
+        val rawDataEntities = newPlaces.map { place ->
+            CafeRawData.of(place, batchId, objectMapper)
+        }
+
+        cafeRawDataRepository.saveAll(rawDataEntities)
         return newPlaces.size
     }
 
+    private fun createBatchJob(): BatchJob {
+        return batchJobService.createBatchJob(JobType.PROCESS_RAW_DATA, JobStatus.RUNNING)
+    }
+
+    private fun updateBatchCount(
+        batchJob: BatchJob,
+        collectionResult: OperationCountResponse
+    ) {
+        batchJobService.updateBatchCount(
+            batchJob,
+            collectionResult.processedCount,
+            collectionResult.successCount,
+            collectionResult.errorCount
+        )
+    }
+
+    private fun handleException(batchJob: BatchJob, e: Exception) {
+        logger.error("Raw data collection failed - ID: {}", batchJob.batchId, e)
+        batchJobService.updateBatchStatus(batchJob, JobStatus.FAILED)
+    }
 }

@@ -1,6 +1,6 @@
 package com.jigeumopen.jigeum.common.exception
 
-import com.jigeumopen.jigeum.cafe.dto.ErrorResponse
+import com.jigeumopen.jigeum.common.dto.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

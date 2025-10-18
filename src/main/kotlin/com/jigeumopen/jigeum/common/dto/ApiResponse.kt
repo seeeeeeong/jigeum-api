@@ -1,4 +1,4 @@
-package com.jigeumopen.jigeum.cafe.dto
+package com.jigeumopen.jigeum.common.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDateTime

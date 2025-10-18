@@ -24,7 +24,7 @@ class CafeOperatingHour(
 ) : BaseEntity() {
 
     companion object {
-        fun create(placeId: String, dayOfWeek: Int, openTime: LocalTime, closeTime: LocalTime): CafeOperatingHour {
+        fun of(placeId: String, dayOfWeek: Int, openTime: LocalTime, closeTime: LocalTime): CafeOperatingHour {
             return CafeOperatingHour(placeId, dayOfWeek, openTime, closeTime)
         }
     }

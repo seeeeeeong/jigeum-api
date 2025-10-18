@@ -1,137 +1,136 @@
 package com.jigeumopen.jigeum.batch.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.jigeumopen.jigeum.batch.dto.BatchJobResponse
+import com.jigeumopen.jigeum.batch.dto.OperationCountResponse
+import com.jigeumopen.jigeum.batch.dto.OperationResponse
 import com.jigeumopen.jigeum.batch.entity.BatchJob
-import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
-import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
-import com.jigeumopen.jigeum.batch.repository.GooglePlacesRawDataRepository
-import com.jigeumopen.jigeum.cafe.entity.Cafe
-import com.jigeumopen.jigeum.cafe.entity.CafeOperatingHour
-import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
-import com.jigeumopen.jigeum.cafe.repository.CafeRepository
-import com.jigeumopen.jigeum.common.util.GeometryUtils
-import com.jigeumopen.jigeum.infrastructure.client.dto.RegularOpeningHours
+import com.jigeumopen.jigeum.batch.entity.CafeRawData
+import com.jigeumopen.jigeum.batch.entity.JobStatus
+import com.jigeumopen.jigeum.batch.entity.JobType
+import com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository
+import com.jigeumopen.jigeum.cafe.service.CafeService
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import java.time.LocalTime
-import java.util.*
 
 @Service
 class DataProcessingService(
-    private val rawDataRepository: GooglePlacesRawDataRepository,
-    private val cafeRepository: CafeRepository,
-    private val operatingHourRepository: CafeOperatingHourRepository,
-    private val batchJobRepository: BatchJobRepository,
-    private val geometryUtils: GeometryUtils,
-    private val objectMapper: ObjectMapper
+    private val rawPlacesRepository: CafeRawDataRepository,
+    private val batchJobService: BatchJobService,
+    private val cafeService: CafeService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     companion object {
         private const val BATCH_SIZE = 100
+        private const val BATCH_DELAY_MS = 100L
     }
 
-    suspend fun processRawData(reprocessAll: Boolean = false): BatchJobResponse = coroutineScope {
-        val batchId = UUID.randomUUID().toString().take(8)
-        val batchJob = batchJobRepository.save(
-            BatchJob(batchId, BatchJob.JobType.PROCESS_RAW_DATA, BatchJob.JobStatus.RUNNING)
-        )
+    suspend fun processRawData(reprocessAll: Boolean = false): OperationResponse = coroutineScope {
+        val batchJob = createBatchJob()
 
-        logger.info("Starting data processing batch: {}, reprocessAll: {}", batchId, reprocessAll)
+        logger.info("Processing batch started - ID: {}, Reprocess all: {}", batchJob.batchId, reprocessAll)
 
         try {
-            val totalCount = if (reprocessAll) rawDataRepository.count()
-            else rawDataRepository.countByProcessed(false)
-            val totalPages = ((totalCount + BATCH_SIZE - 1) / BATCH_SIZE).toInt()
+            val totalPlaces = getTotalPlaces(reprocessAll)
+            val totalPages = ((totalPlaces + BATCH_SIZE - 1) / BATCH_SIZE).toInt()
 
-            var processedCount = 0
-            var successCount = 0
-            var errorCount = 0
+            val processResult = processPages(batchJob, totalPages, totalPlaces, reprocessAll)
+            updateProcessCount(batchJob, processResult.processedCount, processResult.successCount, processResult.errorCount)
 
-            for (page in 0 until totalPages) {
-                val rawDataPage = if (reprocessAll)
-                    rawDataRepository.findAll(PageRequest.of(page, BATCH_SIZE))
-                else
-                    rawDataRepository.findByProcessed(false, PageRequest.of(page, BATCH_SIZE))
+            logger.info(
+                "Processing batch completed - ID: {}, Success: {}/{}, Errors: {}",
+                batchJob.batchId, processResult.successCount, processResult.processedCount, processResult.errorCount
+            )
 
-                val results = rawDataPage.content.map { rawData ->
-                    async(Dispatchers.IO) {
-                        runCatching {
-                            processRawDataItem(rawData)
-                            true
-                        }.getOrElse { e ->
-                            logger.error("Failed to process raw data: {}", rawData.placeId, e)
-                            false
-                        }
-                    }
-                }.awaitAll()
-
-                val pageSuccess = results.count { it }
-                val pageError = results.count { !it }
-                processedCount += rawDataPage.content.size
-                successCount += pageSuccess
-                errorCount += pageError
-
-                batchJob.updateProgress(processedCount, successCount, errorCount)
-                batchJobRepository.save(batchJob)
-
-                logger.info(
-                    "Processing progress: {}/{}, Success: {}, Error: {}",
-                    processedCount, totalCount, successCount, errorCount
-                )
-
-                delay(100)
-            }
-
-            batchJob.completeWithResult(processedCount, successCount, errorCount)
-            batchJobRepository.save(batchJob)
-            logger.info("Data processing completed: {}, Success: {}/{}", batchId, successCount, processedCount)
-
-            BatchJobResponse.from(batchJob)
+            OperationResponse.from(batchJob)
         } catch (e: Exception) {
-            logger.error("Batch processing failed: {}", batchId, e)
-            batchJob.completeFailed()
-            batchJobRepository.save(batchJob)
+            handleException(batchJob, e)
             throw e
         }
     }
 
-    @Transactional
-    fun processRawDataItem(rawData: GooglePlacesRawData) {
-        val cafe = cafeRepository.findByPlaceId(rawData.placeId)
-            ?: Cafe.create(rawData, geometryUtils.createPoint(rawData.longitude, rawData.latitude))
-                .also { cafeRepository.save(it) }
+    private suspend fun processPages(
+        batchJob: BatchJob,
+        totalPages: Int,
+        totalPlaces: Long,
+        reprocessAll: Boolean
+    ): OperationCountResponse {
+        var processedTotal = 0
+        var successTotal = 0
+        var errorTotal = 0
 
-        rawData.openingHours?.let { processOperatingHours(cafe, it) }
-        rawData.markAsProcessed()
-        rawDataRepository.save(rawData)
-    }
+        val processedFilter: Boolean? = if (reprocessAll) null else false
 
-    @Transactional
-    fun processOperatingHours(cafe: Cafe, openingHoursJson: String) {
-        try {
-            operatingHourRepository.deleteByPlaceId(cafe.placeId)
+        for (pageNumber in 0 until totalPages) {
+            val pageData = getPageData(processedFilter, pageNumber)
+            val pageResult = processPage(pageData)
 
-            val openingHours = objectMapper.readValue<RegularOpeningHours>(openingHoursJson)
-            val operatingHours = openingHours.periods
-                ?.map { period ->
-                    CafeOperatingHour.create(
-                        cafe.placeId,
-                        period.open.day,
-                        LocalTime.of(period.open.hour, period.open.minute),
-                        LocalTime.of(period.close.hour, period.close.minute)
-                    )
-                }
-                .orEmpty()
+            processedTotal += pageData.content.size
+            successTotal += pageResult.successCount
+            errorTotal += pageResult.errorCount
 
-            operatingHourRepository.saveAll(operatingHours)
-        } catch (e: Exception) {
-            logger.error("Failed to process operating hours for cafe: {}", cafe.placeId, e)
+            updateProcessCount(batchJob, processedTotal, successTotal, errorTotal)
+
+            logger.info(
+                "Processing progress - Page: {}/{}, Records: {}/{}, Success: {}, Errors: {}",
+                pageNumber + 1, totalPages, processedTotal, totalPlaces, successTotal, errorTotal
+            )
+
+            delay(BATCH_DELAY_MS)
         }
+
+        return OperationCountResponse(processedTotal, successTotal, errorTotal)
     }
+
+    private suspend fun processPage(pageData: org.springframework.data.domain.Page<CafeRawData>): OperationCountResponse = coroutineScope {
+        val results = pageData.content.map { rawPlace ->
+            async(Dispatchers.IO) {
+                runCatching {
+                    processRawDataToCafe(rawPlace)
+                    true
+                }.onFailure { e ->
+                    logger.error("Failed to process place: {} - {}", rawPlace.placeId, e.message)
+                }.getOrDefault(false)
+            }
+        }.awaitAll()
+
+        val success = results.count { it }
+        val error = results.size - success
+        OperationCountResponse(results.size, success, error)
+    }
+
+    fun createBatchJob(): BatchJob {
+        return batchJobService.createBatchJob(JobType.PROCESS_RAW_DATA, JobStatus.RUNNING)
+    }
+
+    private fun getPageData(
+        processedFilter: Boolean?,
+        pageNumber: Int
+    ): Page<CafeRawData> {
+        return rawPlacesRepository.findByProcessedNullable(
+            processedFilter,
+            PageRequest.of(pageNumber, BATCH_SIZE)
+        )
+    }
+
+    fun getTotalPlaces(reprocessAll: Boolean): Long {
+        return if (reprocessAll) rawPlacesRepository.count()
+        else rawPlacesRepository.countByProcessed(false)
+    }
+
+    private fun processRawDataToCafe(rawPlace: CafeRawData) {
+        cafeService.processRawDataToCafe(rawPlace)
+    }
+
+    fun updateProcessCount(batchJob: BatchJob, processed: Int, success: Int, error: Int) {
+        batchJobService.updateBatchCount(batchJob, processed, success, error)
+    }
+
+    fun handleException(batchJob: BatchJob, e: java.lang.Exception) {
+        logger.error("Batch processing failed - ID: {}", batchJob.batchId, e)
+        batchJobService.updateBatchStatus(batchJob, JobStatus.FAILED)
+    }
+
 }

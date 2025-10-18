@@ -1,6 +1,6 @@
 package com.jigeumopen.jigeum.cafe.entity
 
-import com.jigeumopen.jigeum.batch.entity.GooglePlacesRawData
+import com.jigeumopen.jigeum.batch.entity.CafeRawData
 import com.jigeumopen.jigeum.common.entity.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -30,7 +30,7 @@ class Cafe(
     val location: Point
 ) : BaseEntity() {
     companion object {
-        fun create(rawData: GooglePlacesRawData, location: Point): Cafe = Cafe(
+        fun create(rawData: CafeRawData, location: Point): Cafe = Cafe(
             placeId = rawData.placeId,
             name = rawData.displayName!!,
             address = rawData.formattedAddress,

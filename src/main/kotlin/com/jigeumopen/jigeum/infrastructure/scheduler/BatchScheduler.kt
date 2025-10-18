@@ -1,7 +1,7 @@
 package com.jigeumopen.jigeum.infrastructure.scheduler
 
-import com.jigeumopen.jigeum.batch.entity.BatchJob
-import com.jigeumopen.jigeum.batch.entity.BatchJob.JobType
+import com.jigeumopen.jigeum.batch.entity.JobStatus
+import com.jigeumopen.jigeum.batch.entity.JobType
 import com.jigeumopen.jigeum.batch.repository.BatchJobRepository
 import com.jigeumopen.jigeum.batch.service.DataProcessingService
 import com.jigeumopen.jigeum.batch.service.RawDataCollectionService
@@ -74,7 +74,7 @@ class BatchScheduler(
         runBlocking {
             try {
                 val resetCount = batchJobRepository.findAll()
-                    .count { it.status == BatchJob.JobStatus.FAILED }
+                    .count { it.status == JobStatus.FAILED }
 
                 if (resetCount > 0) {
                     logger.info("Retrying {} failed batch jobs", resetCount)
