@@ -26,7 +26,7 @@ class CafeOperatingHourService(
             val openingHours = objectMapper.readValue<RegularOpeningHours>(openingHoursJson)
             val operatingHours = openingHours.periods
                 ?.mapNotNull { period ->
-                    period.close?.let {  // 👈 close가 있을 때만 처리
+                    period.close?.let {
                         CafeOperatingHour.of(
                             placeId = cafe.placeId,
                             dayOfWeek = period.open.day,

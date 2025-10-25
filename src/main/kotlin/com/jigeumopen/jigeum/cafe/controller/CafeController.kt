@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/cafes")
 class CafeController(
-    private val searchService: CafeService
+    private val cafeService: CafeService
 ) {
     @GetMapping("/search")
     suspend fun searchCafes(@Valid @ModelAttribute request: CafeRequest) =
-        ApiResponse.success(searchService.searchNearby(request))
+        ApiResponse.success(cafeService.searchNearby(request))
+
+    @GetMapping("/{cafeId}")
+    suspend fun getCafeDetail(@PathVariable cafeId: Long) =
+        ApiResponse.success(cafeService.getCafeDetail(cafeId))
 }

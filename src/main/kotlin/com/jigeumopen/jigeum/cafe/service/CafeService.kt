@@ -1,9 +1,11 @@
 package com.jigeumopen.jigeum.cafe.service
 
 import com.jigeumopen.jigeum.batch.entity.CafeRawData
+import com.jigeumopen.jigeum.cafe.dto.CafeDetailResponse
 import com.jigeumopen.jigeum.cafe.dto.CafeRequest
 import com.jigeumopen.jigeum.cafe.dto.CafeResponse
 import com.jigeumopen.jigeum.cafe.entity.Cafe
+import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import com.jigeumopen.jigeum.common.dto.PageResponse
 import com.jigeumopen.jigeum.common.util.GeometryUtils
@@ -19,7 +21,8 @@ import java.time.LocalTime
 class CafeService(
     private val geometryUtils: GeometryUtils,
     private val cafeRepository: CafeRepository,
-    private val cafeOperatingHourService: CafeOperatingHourService
+    private val cafeOperatingHourService: CafeOperatingHourService,
+    private val cafeOperatingHourRepository: CafeOperatingHourRepository
 ) {
     suspend fun searchNearby(request: CafeRequest): PageResponse<CafeResponse> =
         withContext(Dispatchers.IO) {
@@ -48,6 +51,17 @@ class CafeService(
             )
         }
 
+    suspend fun getCafeDetail(cafeId: Long): CafeDetailResponse =
+        withContext(Dispatchers.IO) {
+            val cafe = cafeRepository.findById(cafeId)
+                .orElseThrow { IllegalArgumentException("cafe not found: $cafeId") }
+
+            val operatingHours = cafeOperatingHourRepository
+                .findByPlaceIdOrderByDayOfWeekAsc(cafe.placeId)
+
+            CafeDetailResponse.from(cafe, operatingHours)
+        }
+
     @Transactional
     fun processRawDataToCafe(cafeRawData: CafeRawData) {
         val cafe = cafeRepository.findByPlaceId(cafeRawData.placeId) ?: run {
@@ -58,7 +72,5 @@ class CafeService(
         cafeRawData.openingHours?.let {
             cafeOperatingHourService.processOperatingHour(cafe, it)
         }
-
-
     }
 }

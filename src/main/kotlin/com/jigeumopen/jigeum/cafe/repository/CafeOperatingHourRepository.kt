@@ -14,4 +14,6 @@ interface CafeOperatingHourRepository : JpaRepository<CafeOperatingHour, Long> {
     @Query("DELETE FROM CafeOperatingHour oh WHERE oh.placeId = :placeId")
     fun deleteByPlaceId(@Param("placeId") placeId: String)
 
+    fun findByPlaceIdOrderByDayOfWeekAsc(placeId: String): List<CafeOperatingHour>
+
 }
