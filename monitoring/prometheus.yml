@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'jigeum-monitor'
+
+scrape_configs:
+  - job_name: 'jigeum-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['jigeum-api:8080']
+        labels:
+          application: 'jigeum-api'
+          environment: 'development'
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+        labels:
+          application: 'redis'
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+        labels:
+          application: 'postgres'

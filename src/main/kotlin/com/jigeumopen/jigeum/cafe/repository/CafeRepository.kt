@@ -9,26 +9,28 @@ import java.time.LocalTime
 
 @Repository
 interface CafeRepository : JpaRepository<Cafe, Long> {
-
     fun findByPlaceId(placeId: String): Cafe?
 
-    @Query(value = """
-    SELECT c.* 
-    FROM cafes c
-    INNER JOIN cafe_operating_hours oh ON oh.place_id = c.place_id
-    WHERE oh.day_of_week = :dayOfWeek
-      AND oh.open_time <= :time
-      AND oh.close_time > :time
-      AND ST_DWithin(
-          c.location::geography, 
-          ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography, 
-          :radius
-      )
-    ORDER BY ST_Distance(
-        c.location::geography, 
-        ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography
+    @Query(
+        value = """
+            SELECT c.* 
+            FROM cafes c
+            INNER JOIN cafe_operating_hours oh ON oh.place_id = c.place_id
+            WHERE oh.day_of_week = :dayOfWeek
+              AND oh.open_time <= :time
+              AND oh.close_time > :time
+              AND ST_DWithin(
+                  CAST(c.location AS geography), 
+                  CAST(ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326) AS geography), 
+                  :radius
+              )
+            ORDER BY ST_Distance(
+                CAST(c.location AS geography), 
+                CAST(ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326) AS geography)
+            )
+        """,
+        nativeQuery = true
     )
-""", nativeQuery = true)
     fun findNearbyOpenCafes(
         @Param("latitude") latitude: Double,
         @Param("longitude") longitude: Double,

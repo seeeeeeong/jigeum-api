@@ -18,6 +18,8 @@ interface BatchJobRepository : JpaRepository<BatchJob, String> {
         startedAt: LocalDateTime
     ): List<BatchJob>
 
+    fun countByStatus(status: JobStatus): Long
+
     @Query("""
         SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END
         FROM BatchJob b

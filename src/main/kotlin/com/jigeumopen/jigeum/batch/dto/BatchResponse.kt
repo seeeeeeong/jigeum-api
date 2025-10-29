@@ -35,3 +35,22 @@ data class OperationCountResponse(
     val successCount: Int,
     val errorCount: Int
 )
+
+data class BatchStatistics(
+    val totalJobs: Int,
+    val completedJobs: Int,
+    val failedJobs: Int,
+    val runningJobs: Int,
+    val successRate: Double,
+    val averageDurationMs: Double,
+    val errorRate: Double
+)
+
+data class JobTypeStatistics(
+    val jobType: String,
+    val totalJobs: Int,
+    val totalProcessed: Int,
+    val totalSuccess: Int,
+    val totalErrors: Int,
+    val successRate: Double
+)
