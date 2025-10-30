@@ -9,6 +9,7 @@ import com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository
 import com.jigeumopen.jigeum.cafe.repository.CafeRepository
 import com.jigeumopen.jigeum.common.config.recordSuspend
 import com.jigeumopen.jigeum.common.dto.PageResponse
+import com.jigeumopen.jigeum.common.util.GeohashUtils
 import com.jigeumopen.jigeum.common.util.GeometryUtils
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
@@ -26,6 +27,7 @@ import java.time.LocalTime
 @Transactional(readOnly = true)
 class CafeService(
     private val geometryUtils: GeometryUtils,
+    private val geohashUtils: GeohashUtils,
     private val cafeRepository: CafeRepository,
     private val cafeOperatingHourService: CafeOperatingHourService,
     private val cafeOperatingHourRepository: CafeOperatingHourRepository,
@@ -33,7 +35,6 @@ class CafeService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    // 메트릭
     private val searchCounter: Counter = meterRegistry.counter("cafe.search.count")
     private val searchTimer: Timer = meterRegistry.timer("cafe.search.duration")
     private val detailCounter: Counter = meterRegistry.counter("cafe.detail.count")
@@ -41,7 +42,7 @@ class CafeService(
 
     @Cacheable(
         value = ["nearby"],
-        key = "#request.lat + ':' + #request.lng + ':' + #request.radius + ':' + #request.time",
+        keyGenerator = "geohashKeyGenerator",
         unless = "#result.content.isEmpty()"
     )
     suspend fun searchNearby(request: CafeRequest): PageResponse<CafeResponse> = 
@@ -52,9 +53,13 @@ class CafeService(
                 val time = LocalTime.parse(request.time)
                 val dayOfWeek = LocalDate.now().dayOfWeek.value % 7
 
+                val geohash = geohashUtils.encode(request.lat, request.lng, precision = 6)
+                val roundedRadius = (request.radius / 100) * 100
+                val cacheKey = "$geohash:$roundedRadius:${request.time}"
+                
                 logger.debug(
-                    "Searching cafes - lat: {}, lng: {}, radius: {}, time: {}, day: {}",
-                    request.lat, request.lng, request.radius, time, dayOfWeek
+                    "Searching cafes - cacheKey: {}, lat: {}, lng: {}, radius: {}, time: {}, day: {}",
+                    cacheKey, request.lat, request.lng, request.radius, time, dayOfWeek
                 )
 
                 val cafes = cafeRepository.findNearbyOpenCafes(
@@ -65,7 +70,7 @@ class CafeService(
                     time = time
                 )
 
-                logger.info("Found {} cafes within {}m radius", cafes.size, request.radius)
+                logger.info("Found {} cafes within {}m radius (cache key: {})", cafes.size, request.radius, cacheKey)
 
                 meterRegistry.gauge("cafe.search.results", cafes.size)
 

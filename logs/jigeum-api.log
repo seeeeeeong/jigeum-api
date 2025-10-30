@@ -3411,3 +3411,942 @@ Caused by: org.postgresql.util.PSQLException: ERROR: syntax error at or near ":"
 2025-10-30 01:00:10.791 INFO  [tomcat-handler-46] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 2ms
 2025-10-30 01:00:12.136 INFO  [tomcat-handler-47] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 2ms
 2025-10-30 01:00:22.122 INFO  [tomcat-handler-49] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/340 - 200 - 2ms
+2025-10-30 01:32:45.329 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m10s966ms).
+2025-10-30 01:34:06.325 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m20s999ms).
+2025-10-30 02:27:27.094 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=53m20s768ms).
+2025-10-30 02:28:39.788 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m12s694ms).
+2025-10-30 02:31:42.951 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m3s164ms).
+2025-10-30 02:35:54.149 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m11s198ms).
+2025-10-30 03:27:55.640 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=52m1s491ms).
+2025-10-30 05:07:05.329 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h39m9s689ms).
+2025-10-30 06:18:58.329 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h11m53s).
+2025-10-30 07:50:32.028 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h31m33s699ms).
+2025-10-30 08:50:01.626 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=59m29s598ms).
+2025-10-30 09:35:40.779 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=45m39s152ms).
+2025-10-30 10:19:13.159 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=43m32s381ms).
+2025-10-30 10:22:48.749 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m35s590ms).
+2025-10-30 11:04:57.743 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=42m8s994ms).
+2025-10-30 11:55:46.231 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=50m48s487ms).
+2025-10-30 12:06:16.461 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10m30s231ms).
+2025-10-30 12:22:19.112 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m2s651ms).
+2025-10-30 13:23:20.659 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h1m1s546ms).
+2025-10-30 14:23:47.575 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h26s917ms).
+2025-10-30 15:39:02.854 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h15m15s279ms).
+2025-10-30 16:25:36.189 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=46m33s334ms).
+2025-10-30 17:11:11.777 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=45m35s588ms).
+2025-10-30 17:51:46.309 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=40m34s532ms).
+2025-10-30 18:27:24.908 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m38s600ms).
+2025-10-30 19:07:47.999 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=40m23s91ms).
+2025-10-30 19:11:20.237 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m32s238ms).
+2025-10-30 19:15:11.109 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m50s872ms).
+2025-10-30 19:16:58.356 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m17s241ms).
+2025-10-30 20:13:19.462 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=55m51s103ms).
+2025-10-30 20:14:06.092 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=46s629ms).
+2025-10-30 21:05:12.241 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=51m6s150ms).
+2025-10-30 21:07:29.665 WARN  [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m17s423ms).
+2025-10-30 21:25:14.694 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:14.713 INFO  [tomcat-handler-52] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 5ms
+2025-10-30 21:25:14.777 INFO  [tomcat-handler-54] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 4ms
+2025-10-30 21:25:14.802 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:14.806 INFO  [tomcat-handler-57] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.830 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:14.839 INFO  [tomcat-handler-60] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.871 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:14.873 INFO  [tomcat-handler-63] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.903 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:14.907 INFO  [tomcat-handler-66] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.935 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:14.939 INFO  [tomcat-handler-69] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.962 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:14.966 INFO  [tomcat-handler-72] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:14.993 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 22 cafes within 1000m radius
+2025-10-30 21:25:14.996 INFO  [tomcat-handler-75] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:54.905 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:54.912 INFO  [tomcat-handler-78] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 2ms
+2025-10-30 21:25:54.949 INFO  [tomcat-handler-80] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:54.981 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:54.987 INFO  [tomcat-handler-83] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:55.010 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:55.013 INFO  [tomcat-handler-86] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
+2025-10-30 21:25:55.036 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius
+2025-10-30 21:25:55.040 INFO  [tomcat-handler-89] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:55.062 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:55.065 INFO  [tomcat-handler-91] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
+2025-10-30 21:25:55.087 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:55.091 INFO  [tomcat-handler-94] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:55.111 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 21 cafes within 1000m radius
+2025-10-30 21:25:55.114 INFO  [tomcat-handler-97] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:25:55.133 INFO  [DefaultDispatcher-worker-3] com.jigeumopen.jigeum.cafe.service.CafeService - Found 22 cafes within 1000m radius
+2025-10-30 21:25:55.134 INFO  [tomcat-handler-100] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
+2025-10-30 21:27:01.017 INFO  [SpringApplicationShutdownHook] o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-30 21:27:03.037 INFO  [tomcat-shutdown] o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-10-30 21:27:05.397 INFO  [SpringApplicationShutdownHook] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:27:05.425 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-30 21:27:05.430 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-30 21:32:37.321 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - Starting JigeumApiApplicationTests using Java 22.0.1 with PID 7800 (started by leesinseong in /Users/leesinseong/Desktop/jigeum-api)
+2025-10-30 21:32:37.324 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2025-10-30 21:32:37.898 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:32:37.899 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-30 21:32:37.975 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 4 JPA repository interfaces.
+2025-10-30 21:32:37.983 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:32:37.984 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-30 21:32:37.992 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.BatchJobRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:37.993 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:37.993 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:37.993 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:37.993 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-10-30 21:32:38.362 INFO  [Test worker] org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-30 21:32:38.389 INFO  [Test worker] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-10-30 21:32:38.393 INFO  [Test worker] org.hibernate.spatial.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2025-10-30 21:32:38.404 INFO  [Test worker] o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-30 21:32:38.447 INFO  [Test worker] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-30 21:32:38.501 INFO  [Test worker] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@16890f00
+2025-10-30 21:32:38.502 INFO  [Test worker] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-30 21:32:38.517 WARN  [Test worker] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-30 21:32:38.528 INFO  [Test worker] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:38.593 INFO  [Test worker] o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-30 21:32:38.604 INFO  [Test worker] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:38.730 INFO  [Test worker] org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:38.993 INFO  [Test worker] o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-30 21:32:39.032 INFO  [Test worker] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:32:39.492 INFO  [Test worker] o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-30 21:32:40.075 ERROR [Test worker] i.n.resolver.dns.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-10-30 21:32:40.421 WARN  [Test worker] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-30 21:32:40.963 INFO  [Test worker] o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-10-30 21:32:41.010 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - Started JigeumApiApplicationTests in 3.856 seconds (process running for 4.425)
+2025-10-30 21:32:41.417 INFO  [SpringApplicationShutdownHook] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:32:41.418 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-30 21:32:41.420 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-30 21:32:49.451 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - Starting JigeumApiApplicationKt using Java 22.0.1 with PID 7912 (/Users/leesinseong/Desktop/jigeum-api/build/classes/kotlin/main started by leesinseong in /Users/leesinseong/Desktop/jigeum-api)
+2025-10-30 21:32:49.452 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2025-10-30 21:32:49.996 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:32:49.997 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-30 21:32:50.067 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 68 ms. Found 4 JPA repository interfaces.
+2025-10-30 21:32:50.073 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:32:50.074 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-30 21:32:50.080 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.BatchJobRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:50.081 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:50.081 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:50.081 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:32:50.081 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-10-30 21:32:50.513 INFO  [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-10-30 21:32:50.524 INFO  [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-30 21:32:50.524 INFO  [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-10-30 21:32:50.575 INFO  [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-30 21:32:50.575 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1103 ms
+2025-10-30 21:32:50.783 INFO  [main] org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-30 21:32:50.805 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-10-30 21:32:50.811 INFO  [main] org.hibernate.spatial.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2025-10-30 21:32:50.822 INFO  [main] o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-30 21:32:50.909 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-30 21:32:50.990 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@61246109
+2025-10-30 21:32:50.992 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-30 21:32:51.016 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-30 21:32:51.044 INFO  [main] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:51.141 INFO  [main] o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-30 21:32:51.164 INFO  [main] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:51.385 INFO  [main] org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:32:52.031 INFO  [main] o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-30 21:32:52.089 INFO  [main] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:32:52.946 INFO  [main] o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-30 21:32:53.461 ERROR [main] i.n.resolver.dns.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-10-30 21:32:53.742 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-30 21:32:54.276 INFO  [main] o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2025-10-30 21:32:54.324 INFO  [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2025-10-30 21:32:54.332 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - Started JigeumApiApplicationKt in 5.083 seconds (process running for 5.244)
+2025-10-30 21:33:11.365 INFO  [tomcat-handler-0] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-30 21:33:11.366 INFO  [tomcat-handler-0] org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-10-30 21:33:11.371 INFO  [tomcat-handler-0] org.springframework.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2025-10-30 21:33:11.667 ERROR [tomcat-handler-0] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.707 INFO  [tomcat-handler-0] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 45ms
+2025-10-30 21:33:11.744 ERROR [tomcat-handler-1] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.746 INFO  [tomcat-handler-1] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 2ms
+2025-10-30 21:33:11.767 ERROR [tomcat-handler-2] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.768 INFO  [tomcat-handler-2] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 1ms
+2025-10-30 21:33:11.793 ERROR [tomcat-handler-3] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.795 INFO  [tomcat-handler-3] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 2ms
+2025-10-30 21:33:11.809 ERROR [tomcat-handler-4] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.811 INFO  [tomcat-handler-4] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 2ms
+2025-10-30 21:33:11.827 ERROR [tomcat-handler-5] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.829 INFO  [tomcat-handler-5] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 2ms
+2025-10-30 21:33:11.848 ERROR [tomcat-handler-6] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.850 INFO  [tomcat-handler-6] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 2ms
+2025-10-30 21:33:11.876 ERROR [tomcat-handler-7] c.j.jigeum.common.exception.GlobalExceptionHandler - Unexpected error
+org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method call: Method getCacheKey(com.jigeumopen.jigeum.cafe.dto.CafeRequest,com.jigeumopen.jigeum.cafe.dto.CafeRequest) cannot be found on type com.jigeumopen.jigeum.cafe.service.CafeService
+	at org.springframework.expression.spel.ast.MethodReference.findAccessorForMethod(MethodReference.java:237)
+	at org.springframework.expression.spel.ast.MethodReference.getValueInternal(MethodReference.java:147)
+	at org.springframework.expression.spel.ast.MethodReference$MethodValueRef.getValue(MethodReference.java:400)
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:98)
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:114)
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:273)
+	at org.springframework.cache.interceptor.CacheOperationExpressionEvaluator.key(CacheOperationExpressionEvaluator.java:106)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CacheOperationContext.generateKey(CacheAspectSupport.java:874)
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:671)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedValue(CacheAspectSupport.java:456)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:407)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:371)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.jigeumopen.jigeum.cafe.service.CafeService$$SpringCGLIB$$0.searchNearby(<generated>)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes$suspendImpl(CafeController.kt:59)
+	at com.jigeumopen.jigeum.cafe.controller.CafeController.searchCafes(CafeController.kt)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method.callMethod(CallerImpl.kt:97)
+	at kotlin.reflect.jvm.internal.calls.CallerImpl$Method$Instance.call(CallerImpl.kt:113)
+	at kotlin.reflect.jvm.internal.KCallableImpl.callDefaultMethod$kotlin_reflection(KCallableImpl.kt:207)
+	at kotlin.reflect.full.KCallables.callSuspendBy(KCallables.kt:74)
+	at org.springframework.core.CoroutinesUtils.lambda$invokeSuspendingFunction$2(CoroutinesUtils.java:124)
+	at kotlin.coroutines.intrinsics.IntrinsicsKt__IntrinsicsJvmKt$createCoroutineUnintercepted$$inlined$createCoroutineFromSuspendFunction$IntrinsicsKt__IntrinsicsJvmKt$4.invokeSuspend(IntrinsicsJvm.kt:270)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:30)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:25)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:110)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.reactor.MonoKt.monoInternal$lambda$2(Mono.kt:92)
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4512)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler$DeferredResultSubscriber.connect(ReactiveTypeHandler.java:465)
+	at org.springframework.web.servlet.mvc.method.annotation.ReactiveTypeHandler.handleValue(ReactiveTypeHandler.java:163)
+	at org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler.handleReturnValue(ResponseBodyEmitterReturnValueHandler.java:154)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+2025-10-30 21:33:11.878 INFO  [tomcat-handler-7] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 500 - 3ms
+2025-10-30 21:38:35.090 INFO  [SpringApplicationShutdownHook] o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-30 21:38:37.103 INFO  [tomcat-shutdown] o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-10-30 21:38:37.234 INFO  [SpringApplicationShutdownHook] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:38:37.241 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-30 21:38:37.251 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-30 21:38:41.298 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - Starting JigeumApiApplicationTests using Java 22.0.1 with PID 8965 (started by leesinseong in /Users/leesinseong/Desktop/jigeum-api)
+2025-10-30 21:38:41.299 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2025-10-30 21:38:41.875 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:38:41.876 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-30 21:38:41.945 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 66 ms. Found 4 JPA repository interfaces.
+2025-10-30 21:38:41.954 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:38:41.954 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-30 21:38:41.966 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.BatchJobRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:41.966 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:41.966 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:41.967 INFO  [Test worker] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:41.967 INFO  [Test worker] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2025-10-30 21:38:42.348 INFO  [Test worker] org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-30 21:38:42.369 INFO  [Test worker] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-10-30 21:38:42.376 INFO  [Test worker] org.hibernate.spatial.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2025-10-30 21:38:42.388 INFO  [Test worker] o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-30 21:38:42.430 INFO  [Test worker] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-30 21:38:42.484 INFO  [Test worker] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@102aa5fc
+2025-10-30 21:38:42.485 INFO  [Test worker] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-30 21:38:42.500 WARN  [Test worker] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-30 21:38:42.514 INFO  [Test worker] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:42.588 INFO  [Test worker] o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-30 21:38:42.598 INFO  [Test worker] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:42.723 INFO  [Test worker] org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:42.992 INFO  [Test worker] o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-30 21:38:43.033 INFO  [Test worker] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:38:43.473 INFO  [Test worker] o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-30 21:38:44.158 ERROR [Test worker] i.n.resolver.dns.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-10-30 21:38:44.500 WARN  [Test worker] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-30 21:38:45.431 INFO  [Test worker] o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-10-30 21:38:45.505 INFO  [Test worker] com.jigeumopen.jigeum.JigeumApiApplicationTests - Started JigeumApiApplicationTests in 4.372 seconds (process running for 4.945)
+2025-10-30 21:38:45.955 INFO  [SpringApplicationShutdownHook] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:38:45.956 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-30 21:38:45.958 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-30 21:38:54.042 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - Starting JigeumApiApplicationKt using Java 22.0.1 with PID 9066 (/Users/leesinseong/Desktop/jigeum-api/build/classes/kotlin/main started by leesinseong in /Users/leesinseong/Desktop/jigeum-api)
+2025-10-30 21:38:54.043 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2025-10-30 21:38:54.593 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:38:54.594 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-30 21:38:54.669 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 72 ms. Found 4 JPA repository interfaces.
+2025-10-30 21:38:54.674 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-30 21:38:54.675 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-30 21:38:54.682 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.BatchJobRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:54.682 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.batch.repository.CafeRawDataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:54.682 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeOperatingHourRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:54.682 INFO  [main] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.jigeumopen.jigeum.cafe.repository.CafeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-10-30 21:38:54.682 INFO  [main] o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-10-30 21:38:55.111 INFO  [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-10-30 21:38:55.116 INFO  [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-30 21:38:55.116 INFO  [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-10-30 21:38:55.144 INFO  [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-30 21:38:55.144 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1081 ms
+2025-10-30 21:38:55.324 INFO  [main] org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-30 21:38:55.346 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-10-30 21:38:55.350 INFO  [main] org.hibernate.spatial.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2025-10-30 21:38:55.364 INFO  [main] o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-30 21:38:55.408 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-30 21:38:55.464 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@18f13756
+2025-10-30 21:38:55.465 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-30 21:38:55.479 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-30 21:38:55.491 INFO  [main] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:55.556 INFO  [main] o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-30 21:38:55.564 INFO  [main] org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:55.677 INFO  [main] org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-10-30 21:38:55.949 INFO  [main] o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-30 21:38:55.982 INFO  [main] o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-30 21:38:56.335 INFO  [main] o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-30 21:38:56.797 ERROR [main] i.n.resolver.dns.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-10-30 21:38:57.059 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-30 21:38:57.544 INFO  [main] o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2025-10-30 21:38:57.586 INFO  [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2025-10-30 21:38:57.595 INFO  [main] com.jigeumopen.jigeum.JigeumApiApplicationKt - Started JigeumApiApplicationKt in 3.754 seconds (process running for 3.915)
+2025-10-30 21:39:10.383 INFO  [tomcat-handler-0] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-30 21:39:10.386 INFO  [tomcat-handler-0] org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-10-30 21:39:10.396 INFO  [tomcat-handler-0] org.springframework.web.servlet.DispatcherServlet - Completed initialization in 8 ms
+2025-10-30 21:39:11.147 INFO  [DefaultDispatcher-worker-1] com.jigeumopen.jigeum.cafe.service.CafeService - Found 19 cafes within 1000m radius (cache key: wydm6d:1000:14:00)
+2025-10-30 21:39:11.213 INFO  [tomcat-handler-1] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 12ms
+2025-10-30 21:39:11.260 INFO  [tomcat-handler-3] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 3ms
+2025-10-30 21:39:11.280 INFO  [tomcat-handler-5] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:39:11.296 INFO  [tomcat-handler-7] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:39:11.309 INFO  [tomcat-handler-9] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
+2025-10-30 21:39:11.322 INFO  [tomcat-handler-11] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
+2025-10-30 21:39:11.335 INFO  [tomcat-handler-13] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 1ms
+2025-10-30 21:39:11.354 INFO  [DefaultDispatcher-worker-1] com.jigeumopen.jigeum.cafe.service.CafeService - Found 22 cafes within 1000m radius (cache key: wydm6f:1000:14:00)
+2025-10-30 21:39:11.357 INFO  [tomcat-handler-16] c.j.jigeum.common.interceptor.LoggingInterceptor - GET /api/v1/cafes/search - 200 - 0ms
