@@ -62,7 +62,8 @@ class CafeService(
                     cacheKey, request.lat, request.lng, request.radius, time, dayOfWeek
                 )
 
-                val cafes = cafeRepository.findNearbyOpenCafes(
+                // 전체 개수 조회
+                val totalElements = cafeRepository.countNearbyOpenCafes(
                     latitude = request.lat,
                     longitude = request.lng,
                     radius = request.radius,
@@ -70,21 +71,29 @@ class CafeService(
                     time = time
                 )
 
-                logger.info("Found {} cafes within {}m radius (cache key: {})", cafes.size, request.radius, cacheKey)
+                logger.info("Found {} total cafes within {}m radius (cache key: {})", totalElements, request.radius, cacheKey)
 
-                meterRegistry.gauge("cafe.search.results", cafes.size)
+                meterRegistry.gauge("cafe.search.results", totalElements.toDouble())
 
-                val paged = cafes
-                    .drop(request.page * request.size)
-                    .take(request.size)
-                    .map { CafeResponse.from(it) }
+                // 페이지네이션 쿼리
+                val cafes = cafeRepository.findNearbyOpenCafes(
+                    latitude = request.lat,
+                    longitude = request.lng,
+                    radius = request.radius,
+                    dayOfWeek = dayOfWeek,
+                    time = time,
+                    limit = request.size,
+                    offset = request.page * request.size
+                )
+
+                val content = cafes.map { CafeResponse.from(it) }
 
                 PageResponse(
-                    content = paged,
+                    content = content,
                     page = request.page,
                     size = request.size,
-                    totalElements = cafes.size.toLong(),
-                    totalPages = (cafes.size + request.size - 1) / request.size
+                    totalElements = totalElements,
+                    totalPages = ((totalElements + request.size - 1) / request.size).toInt()
                 )
             }
         }

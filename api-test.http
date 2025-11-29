@@ -1,0 +1,362 @@
+### Jigeum API 테스트 파일
+### VS Code에서 REST Client 확장 설치 필요: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = http://localhost:8080
+@adminApiKey = jigeum-admin-secret-key-2024
+
+### ============================================
+### 1. Health Check & Monitoring
+### ============================================
+
+### Health Check
+GET {{baseUrl}}/actuator/health
+Accept: application/json
+
+### Prometheus Metrics
+GET {{baseUrl}}/actuator/prometheus
+Accept: text/plain
+
+### Application Metrics
+GET {{baseUrl}}/actuator/metrics
+Accept: application/json
+
+### Specific Metric - Cafe Search Count
+GET {{baseUrl}}/actuator/metrics/cafe.search.count
+Accept: application/json
+
+### API Documentation (Swagger UI)
+### 브라우저에서 열기: http://localhost:8080/swagger-ui.html
+
+
+### ============================================
+### 2. 카페 검색 API (핵심 기능)
+### ============================================
+
+### 2-1. 기본 검색 - 강남역 주변 1km, 오후 2시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=14:00
+Accept: application/json
+
+### 2-2. 검색 + 페이지네이션
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=2000&time=10:00&page=0&size=10
+Accept: application/json
+
+### 2-3. 넓은 반경 검색 - 5km
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=5000&time=14:00&page=0&size=20
+Accept: application/json
+
+### 2-4. 이른 아침 검색 - 7시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=07:00
+Accept: application/json
+
+### 2-5. 늦은 밤 검색 - 22시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=22:00
+Accept: application/json
+
+### 2-6. 홍대 주변 검색
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5563&lng=126.9234&radius=1000&time=14:00
+Accept: application/json
+
+### 2-7. 잠실 주변 검색
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5133&lng=127.1028&radius=1000&time=14:00
+Accept: application/json
+
+### 2-8. 캐싱 테스트 - 동일한 요청 반복 (2번째는 캐시 히트)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=14:00
+Accept: application/json
+
+
+### ============================================
+### 3. 카페 상세 조회 API
+### ============================================
+
+### 3-1. 카페 상세 정보 조회 (운영시간 포함)
+### 주의: {cafeId}를 실제 ID로 변경하세요
+GET {{baseUrl}}/api/v1/cafes/1
+Accept: application/json
+
+### 3-2. 다른 카페 조회
+GET {{baseUrl}}/api/v1/cafes/2
+Accept: application/json
+
+### 3-3. 존재하지 않는 카페 (404 테스트)
+GET {{baseUrl}}/api/v1/cafes/99999
+Accept: application/json
+
+
+### ============================================
+### 4. 배치 관리 API (Admin 전용)
+### ============================================
+
+### 4-1. 원본 데이터 수집 시작 (Google Places API 호출)
+### 서울 70개 거점에서 카페 데이터 수집 (10-15분 소요)
+POST {{baseUrl}}/api/v1/admin/batch/collect
+X-Admin-API-Key: {{adminApiKey}}
+Content-Type: application/json
+
+### 4-2. 데이터 처리 시작 (원본 → 정규화)
+### 수집한 원본 데이터를 정제하여 DB 저장
+POST {{baseUrl}}/api/v1/admin/batch/process
+X-Admin-API-Key: {{adminApiKey}}
+Content-Type: application/json
+
+### 4-3. 전체 데이터 재처리
+POST {{baseUrl}}/api/v1/admin/batch/process?reprocessAll=true
+X-Admin-API-Key: {{adminApiKey}}
+Content-Type: application/json
+
+### 4-4. 배치 작업 상태 조회
+### batchId를 실제 값으로 변경하세요 (예: batch-20241125-143022)
+GET {{baseUrl}}/api/v1/admin/batch/jobs/batch-20241125-143022
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### 4-5. 전체 배치 통계 조회
+GET {{baseUrl}}/api/v1/admin/batch/statistics
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### 4-6. 수집 작업 통계
+GET {{baseUrl}}/api/v1/admin/batch/statistics/COLLECT_RAW_DATA
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### 4-7. 처리 작업 통계
+GET {{baseUrl}}/api/v1/admin/batch/statistics/PROCESS_RAW_DATA
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### 4-8. 인증 실패 테스트 (잘못된 API Key)
+POST {{baseUrl}}/api/v1/admin/batch/collect
+X-Admin-API-Key: wrong-key
+Content-Type: application/json
+
+### 4-9. 인증 없이 접근 테스트 (401 Unauthorized)
+POST {{baseUrl}}/api/v1/admin/batch/collect
+Content-Type: application/json
+
+
+### ============================================
+### 5. 에러 케이스 테스트
+### ============================================
+
+### 5-1. 잘못된 위도 (범위 초과)
+GET {{baseUrl}}/api/v1/cafes/search?lat=91.0&lng=127.0276&radius=1000&time=14:00
+Accept: application/json
+
+### 5-2. 잘못된 경도 (범위 초과)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=181.0&radius=1000&time=14:00
+Accept: application/json
+
+### 5-3. 잘못된 시간 형식
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=25:00
+Accept: application/json
+
+### 5-4. 필수 파라미터 누락
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000
+Accept: application/json
+
+### 5-5. 반경이 너무 작음 (< 100m)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=50&time=14:00
+Accept: application/json
+
+### 5-6. 반경이 너무 큼 (> 50km)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=60000&time=14:00
+Accept: application/json
+
+
+### ============================================
+### 6. 성능 & 캐싱 테스트
+### ============================================
+
+### 6-1. 첫 번째 요청 (캐시 미스, DB 조회)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5563&lng=126.9234&radius=1000&time=15:00
+Accept: application/json
+
+### 6-2. 두 번째 요청 (캐시 히트, 빠른 응답)
+### 동일한 Geohash 영역이므로 캐시에서 반환
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5563&lng=126.9234&radius=1000&time=15:00
+Accept: application/json
+
+### 6-3. 약간 다른 좌표지만 동일 Geohash (캐시 히트)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5564&lng=126.9235&radius=1000&time=15:00
+Accept: application/json
+
+### 6-4. 다른 시간 (캐시 미스, 새로운 캐시 키)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5563&lng=126.9234&radius=1000&time=16:00
+Accept: application/json
+
+### 6-5. 다른 반경 (캐시 미스)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5563&lng=126.9234&radius=2000&time=15:00
+Accept: application/json
+
+
+### ============================================
+### 7. 대용량 데이터 테스트
+### ============================================
+
+### 7-1. 큰 페이지 사이즈
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=5000&time=14:00&page=0&size=100
+Accept: application/json
+
+### 7-2. 여러 페이지 조회
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=5000&time=14:00&page=0&size=20
+Accept: application/json
+
+###
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=5000&time=14:00&page=1&size=20
+Accept: application/json
+
+###
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=5000&time=14:00&page=2&size=20
+Accept: application/json
+
+
+### ============================================
+### 8. 실제 사용 시나리오
+### ============================================
+
+### 시나리오 1: 출근길 카페 찾기
+### 강남역 근처, 아침 8시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=500&time=08:00
+Accept: application/json
+
+### 시나리오 2: 점심 후 카페
+### 여의도, 오후 1시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5219&lng=126.9245&radius=1000&time=13:00
+Accept: application/json
+
+### 시나리오 3: 저녁 약속 전 카페
+### 이태원, 저녁 6시
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.5345&lng=126.9945&radius=1000&time=18:00
+Accept: application/json
+
+### 시나리오 4: 상세 정보 확인 후 길찾기
+# 1. 검색 결과에서 ID 확인
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=14:00
+Accept: application/json
+
+# 2. 상세 정보 조회 (운영시간 확인)
+GET {{baseUrl}}/api/v1/cafes/1
+Accept: application/json
+
+
+### ============================================
+### 9. Redis 캐싱 동작 확인
+### ============================================
+
+### Geohash 기반 캐싱 테스트
+### 캐시 키 형식: {geohash}:{roundedRadius}:{time}
+### 예: wyxxe3:1000:14:00
+
+### 동일 Geohash 영역 (약 0.95km x 0.95km 격자)
+### 아래 4개 요청은 모두 동일한 캐시 키 사용
+
+### 요청 1 (캐시 미스)
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1000&time=14:00
+Accept: application/json
+
+### 요청 2 (캐시 히트) - 약간 다른 좌표
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4980&lng=127.0277&radius=1000&time=14:00
+Accept: application/json
+
+### 요청 3 (캐시 히트) - 반경 반올림 동일
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4979&lng=127.0276&radius=1050&time=14:00
+Accept: application/json
+
+### 요청 4 (캐시 히트) - 반경 반올림 동일
+GET {{baseUrl}}/api/v1/cafes/search?lat=37.4978&lng=127.0275&radius=950&time=14:00
+Accept: application/json
+
+
+### ============================================
+### 10. 모니터링 메트릭 확인
+### ============================================
+
+### 카페 검색 횟수
+GET {{baseUrl}}/actuator/metrics/cafe.search.count
+Accept: application/json
+
+### 카페 검색 응답 시간
+GET {{baseUrl}}/actuator/metrics/cafe.search.duration
+Accept: application/json
+
+### 카페 검색 결과 수
+GET {{baseUrl}}/actuator/metrics/cafe.search.results
+Accept: application/json
+
+### Google API 호출 횟수
+GET {{baseUrl}}/actuator/metrics/google.places.api.calls
+Accept: application/json
+
+### Google API 에러 횟수
+GET {{baseUrl}}/actuator/metrics/google.places.api.errors
+Accept: application/json
+
+### HTTP 요청 통계
+GET {{baseUrl}}/actuator/metrics/http.server.requests
+Accept: application/json
+
+### JVM 메모리 사용량
+GET {{baseUrl}}/actuator/metrics/jvm.memory.used
+Accept: application/json
+
+### 시스템 CPU 사용량
+GET {{baseUrl}}/actuator/metrics/system.cpu.usage
+Accept: application/json
+
+
+### ============================================
+### 11. 배치 작업 전체 플로우
+### ============================================
+
+### Step 1: 원본 데이터 수집 시작
+POST {{baseUrl}}/api/v1/admin/batch/collect
+X-Admin-API-Key: {{adminApiKey}}
+Content-Type: application/json
+
+### Step 2: 수집 상태 확인 (batchId를 위 응답에서 복사)
+GET {{baseUrl}}/api/v1/admin/batch/jobs/batch-20241125-143022
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### Step 3: 수집 완료 후 데이터 처리 시작
+POST {{baseUrl}}/api/v1/admin/batch/process
+X-Admin-API-Key: {{adminApiKey}}
+Content-Type: application/json
+
+### Step 4: 처리 상태 확인
+GET {{baseUrl}}/api/v1/admin/batch/jobs/batch-20241125-150000
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+### Step 5: 전체 통계 확인
+GET {{baseUrl}}/api/v1/admin/batch/statistics
+X-Admin-API-Key: {{adminApiKey}}
+Accept: application/json
+
+
+### ============================================
+### 참고사항
+### ============================================
+
+# 1. Redis 캐시 TTL
+# - nearby: 5분
+# - cafeDetail: 1시간
+# - batchJobs: 10분
+
+# 2. Rate Limiting
+# - 일반 API: 100 req/min per IP
+# - Admin API: Rate Limiting 제외
+
+# 3. Geohash Precision
+# - Precision 6 사용: 약 0.95km x 0.95km 격자
+# - 근처 좌표는 같은 캐시 키 공유
+
+# 4. 반경 반올림
+# - 100m 단위로 반올림
+# - 950m, 1050m → 1000m으로 통일
+
+# 5. 배치 스케줄
+# - 데이터 수집: 매월 말일 03:00
+# - 재시도: 매월 말일 04:00
+# - 데이터 처리: 매월 말일 05:00
